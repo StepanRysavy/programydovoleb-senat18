@@ -1,0 +1,158 @@
+.company:not(.level-5),
+.company.level-5 .company-content {
+    border-radius: 4px;
+	border: 1px solid #eee;
+	max-width: 50rem;
+	margin: auto;
+	background: #fff;
+	padding: 0;
+	position: relative;
+}
+
+h1 {
+	margin: 0;
+	font-weight: normal;
+	font-size: 1.5rem;
+}
+
+a {
+	text-decoration: none;
+	color: #3c2e8d;
+}
+
+.header-main {
+  margin: 0 0 4rem 0;
+
+	h1 {
+	  text-align: center;
+	  font-size: 2rem;
+	  font-weight: 100;
+	  color: #3c2e8d;
+	  margin: 0;
+	}
+}
+
+.company.level-1 {
+	border-radius: 0;
+	border: none;
+	background: none;
+	padding: .5rem 1rem;
+
+	h1 {
+		font-size: 1rem;
+		font-weight: bold;
+	}
+
+	.opened-relative {
+		font-size: 11px;
+	}
+
+	.header {
+		padding: 0;
+		border-bottom: none;
+	}
+
+	transition: 3s background-color;
+
+	&:hover {
+		transition: .25s background-color;
+		background-color: #eeedf4;
+	}
+}
+
+.header {
+	padding: 2rem 1rem;
+	position: relative;
+	border-bottom: 1px solid #eee;
+
+	@media (min-width: 35rem) {
+		padding: 2rem;
+	}
+}
+
+.content {
+	padding: 1rem;
+	border-bottom: 1px solid #eee;
+
+	&:empty {
+		display: none;
+	}
+}
+
+@media (min-width: 50rem) {
+	.content {
+		padding: 2rem;
+	}
+}
+
+.header-logo {
+	background: #fff;
+	border-radius: 50%;
+	position: absolute;
+	bottom: 100%;
+	right: 1rem;
+	transform: translate(0, 50%);
+	width: 5rem;
+	height: 5rem;
+	overflow: hidden;
+
+	.level-3 > .header & {
+		transform: scale(.5, .5) translate(50%, 100%);
+	}
+
+	.level-2 > .header & {
+		top: 50%;
+		bottom: auto;
+		transform: scale(.5, .5) translate(50%, -100%);
+	}
+
+
+}
+
+.company.level-5 {
+	.opened-relative {
+		text-align: center;
+	}
+
+	.header {
+		padding: 0;
+		border-bottom: none;
+	}
+}
+
+.comment-nasjirak {
+
+	padding: 2rem;
+
+	blockquote {
+		font-family: Georgie, sans;
+		font-style: italic;
+		font-size: 1.25rem;
+		padding: 0 35% .5rem 0;
+		margin: 0;
+	}
+
+	span {
+		display: block;
+		padding: 0 0 0 2rem;
+		font-size: .84rem;
+		color: #888;
+	}
+
+	.level-1 & {
+		margin: 1rem 0;
+		padding: 1rem;
+		background: #fff;;
+		box-shadow: 0 4px 6px rgba(0,0,0,.05);
+		border-bottom: 1px solid #ddd;
+		border-left: 2px solid #3c2e8d;
+
+		blockquote {
+			padding: 0;
+		}
+
+		span {
+			display: none;
+		}
+	}
+}

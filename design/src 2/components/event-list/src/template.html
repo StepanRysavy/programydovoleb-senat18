@@ -1,0 +1,29 @@
+<div class="events-list" :class="'level-' + level">
+
+	<div class="content" v-if="eventsToDisplay > 0">
+
+		<div class="icon" v-if="level === 3"></div>
+
+		<div class="event-list event-list-priority-5" v-if="eventsHighPriority.length > 0">
+			<template v-for="(event, index) in eventsHighPriority">
+				
+				<div class="event-holder">
+					<show-event v-if="level > 0" :data="getEvent(event.id)" :level="level"></show-event>
+				</div>
+				
+
+			</template>
+		</div>
+
+		<div class="event-list event-list-priority-3" v-if="eventsLowPriority.length > 0 && level - 2 > 0">
+			<template v-for="(event, index) in eventsLowPriority">
+				
+				<div class="event-holder">
+					<show-event :data="getEvent(event.id)" :level="level - 2"></show-event>
+				</div>
+
+			</template>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,66 @@
+<div class="company" :class="'level-' + level">
+
+	<div class="header-main" v-if="level === 5">
+		<div class="header-main-name">
+			<h1>
+				<router-link :to="'/co/' + link" v-html="data.name"></router-link>
+			</h1>
+			<show-opened-relative v-if="data.opened" :data="data.opened" :version="data.version || 0"></show-opened-relative>
+		</div>
+	</div>
+
+	<div class="company-content">
+
+		<div class="visual" v-if="data.images && data.images.visual && data.images.visual.length > 0 && level > 2">
+			<show-picture :data="data.images.visual" :level="level" :background="true"></show-picture>
+		</div>
+
+		<div class="header">
+			<div class="header-name" v-if="level < 5">
+				<h1>
+					<router-link :to="'/co/' + link" v-html="data.name"></router-link>
+				</h1>
+				<show-opened-relative v-if="data.opened" :data="data.opened" :version="data.version || 0"></show-opened-relative>
+			</div>
+			<div class="header-logo" v-if="data.images && data.images.logo && data.images.logo.length > 0 && level > 1">
+				<show-picture :data="data.images.logo" :level="level"></show-picture>
+			</div>
+			
+			<show-social v-if="data.social && level > 4" :data="data.social" :level="level"></show-social>
+		</div>
+
+		<div v-if="data.content && level > 4" class="content" v-html="data.content[$store.state.language]"></div>
+
+		<div class="comments" v-if="data.comment">
+			<div class="comment comment-nasjirak content" v-if="data.comment.nasjirak && data.comment.nasjirak[$store.state.language] !== '' && (level === 1 || level > 3)">
+				<blockquote>"{{data.comment.nasjirak[$store.state.language]}}"</blockquote>
+				<span>&mdash; K+Š</span>
+			</div>
+		</div>
+
+		<show-gallery v-if="data.images.gallery && level > 4" :data="data.images.gallery" :level="level"></show-gallery>
+
+		<show-links v-if="data.links && data.links.length > 0 && level > 4" :data="data.links" :level="level"></show-links>
+
+		<div class="info" v-if="level > 4">
+
+			<show-opened v-if="data.opened" :data="data.opened" :level="level" :version="data.version || 0"></show-opened>
+
+			<show-perks v-if="data.perks && level > 4" :data="data.perks" :level="level"></show-perks>
+
+			<show-contact v-if="false" :data="data.contact" :level="level" :house="data.meta.house"></show-contact>
+
+			<show-contact-custom v-if="data.contactsCustom" :data="data.contactsCustom" :level="level"></show-contact-custom>
+
+		</div>
+
+		<show-meta v-if="data.meta && level > 2" :data="data.meta" :level="level" :hash="data.hash"></show-meta>
+
+		<show-feedback v-if="level > 4 && $store.state.admin === false" :data="data"></show-feedback>
+	</div>
+
+	<div class="company-events">
+		<show-event-list v-if="data.events" :data="data.events" :level="level - 2"></show-event-list>
+	</div>
+</div>
+

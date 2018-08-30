@@ -1,0 +1,50 @@
+.image {
+	width: 100%;
+}
+
+.image-as-element {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.image-on-background {
+	width: 100%;
+	height: 100%;
+	background: #fff center center;
+	background-size: cover;
+}
+
+.visual .image-on-background {
+	border-top-right-radius: .5rem;
+	border-top-left-radius: .5rem;
+	height: 10rem;
+
+	&.level-3 {
+		min-height: 15rem;
+	}
+
+	&.level-4 {
+		min-height: 20rem;
+	}
+
+	&.level-5 {
+		min-height: 25rem;
+	}
+}
+
+.gallery.is-thumbs {
+	.image {
+		width: 8rem;
+		height: 8rem;
+		margin: 2px;
+	}
+}
+
+.header-logo img {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

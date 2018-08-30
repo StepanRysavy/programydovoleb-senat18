@@ -1,0 +1,24 @@
+.content {
+	padding: .5rem 1rem;
+}
+
+.gallery-image-info {
+	background: #f4f4f4;
+
+	h4 {
+		margin: 0 0 .5em 0;
+	}
+}
+
+.gallery-image-info,
+.gallery.is-thumbs .images {
+	padding: 1rem;
+	border-bottom: 1px solid #eee;
+}
+
+.gallery.is-thumbs {
+	.images-offset {
+		margin: -2px;
+	}
+}
+

@@ -1,0 +1,29 @@
+button {
+	display: inline-block;
+	padding: .5em 1em;
+	font-size: 1rem;
+	background: none;
+	border: 1px solid rgba(#fff, .2);
+	color: #fff;
+
+	transition: .3s all;
+
+	&:hover {
+		border: 1px solid rgba(#fff, .33);
+		cursor: pointer;
+	}
+
+	&[disabled] {
+		color: rgba(#fff, .2);
+		border: 1px solid rgba(#fff, .1);
+	}
+
+	.login & {
+		color: #3c2e8d;
+		border: 1px solid rgba(#3c2e8d, .2);
+
+		&:hover {
+			border: 1px solid rgba(#3c2e8d, .5);
+		}
+	}
+}

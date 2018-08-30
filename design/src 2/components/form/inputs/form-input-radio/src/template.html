@@ -1,0 +1,14 @@
+<div class="form-input-radio">
+	<div class="form-input-header">
+		{{data.label}} {{data.required ? '*' : ''}}
+	</div>
+	<div class="form-input-content">
+		<template v-for="(radio, index) in data.options">
+			<input type="radio" :name="sharedName" v-model="data.value" v-bind:value="radio.value" v-on="inputListeners"> {{radio.label}}
+		</template>
+	</div>
+	<div class="form-input-error">
+		{{data.error}}
+	</div>
+</div>
+

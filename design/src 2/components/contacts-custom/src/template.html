@@ -1,0 +1,9 @@
+<div class="contacts-custom">
+	<div class="content" v-if="data.length > 0">
+		<div class="contacts-custom-item" v-for="(item, index) in data">
+			<span class="contact-label">{{ item.label[$store.state.language] }}</span>
+			<span class="contact-value" v-html="formatByType(item.content, item.type)"></span>
+		</div>
+	</div>
+</div>
+

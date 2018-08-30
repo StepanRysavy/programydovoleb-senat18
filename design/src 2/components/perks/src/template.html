@@ -1,0 +1,60 @@
+<div class="perks">
+	<div class="content">
+		<div class="perk" v-if="data.wifi === true">
+			<div class="icon">
+				<img src="static/SVG/card-wifi.svg" class="card">
+			</div>
+			<label v-html="B('perks.wifi')"></label>
+		</div>
+		<div class="perk" v-if="data.garden === true">
+			<div class="icon">
+				<img src="static/SVG/card-garden.svg" class="card">
+			</div>
+			<label v-html="B('perks.garden')"></label>
+		</div>
+		<div class="perk" v-if="data.pets === true">
+			<div class="icon">
+				<img src="static/SVG/card-pets.svg" class="card">
+			</div>
+			<label v-html="B('perks.pets')"></label>
+		</div>
+		<div class="perk" v-if="data.accessible === true">
+			<div class="icon">
+				<img src="static/SVG/card-accessible.svg" class="card">
+			</div>
+			<label v-html="B('perks.accessible')"></label>
+		</div>
+		<div class="perk" v-if="some(data.cheques)" :title="cheques">
+			<div class="icon">
+
+				<img src="static/SVG/card-check.svg" class="card">
+				<!--
+				<span v-if="data.cheques.sodexo === true">SX</span>
+				<span v-if="data.cheques.ticket === true">TC</span>
+				<span v-if="data.cheques.sekservis === true">SEK</span>
+				<span v-if="data.cheques.cadhoc === true">CAD</span>
+				-->
+			</div>
+			<label v-html="B('perks.cheques')"></label>
+		</div>
+		<div class="divider"></div>
+		<div class="perk" v-if="some(data.cards)">
+			<div class="icon">
+				<img v-if="data.cards.mastercard === true" src="static/SVG/card-mc.svg" class="card">
+				<img v-if="data.cards.visa === true" src="static/SVG/card-visa.svg" class="card">
+				<img v-if="data.cards.americanexpress === true" src="static/SVG/card-amex.svg" class="card">
+				<img v-if="data.cards.dinersclub === true" src="static/SVG/card-dinersclub.svg" class="card">
+				<img v-if="data.cards.discover === true" src="static/SVG/card-discover.svg" class="card">
+				<img v-if="data.cards.jcb === true" src="static/SVG/card-jcb.svg" class="card">
+			</div>
+			<label v-html="B('perks.cards')"></label>
+		</div>
+		<div class="perk" v-if="some(data.crypto)">
+			<div class="icon">
+				<img v-if="data.crypto.bitcoin === true" src="static/SVG/card-bitcoin.svg" class="card">
+			</div>
+			<label v-html="B('perks.crypto')"></label>
+		</div>
+	</div>
+</div>
+

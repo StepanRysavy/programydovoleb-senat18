@@ -1,0 +1,27 @@
+
+
+.content {
+	padding: 1rem;
+	border-bottom: 1px solid #eee;
+}
+
+.contacts div + div {
+	margin-top: .5em;
+}
+
+.contact-label {
+	display: block;
+}
+
+@media (min-width: 30rem) {
+	.contact-label {
+		width: 8em;
+		display: inline-block;
+	}
+}
+
+@media (min-width: 50rem) {
+	.content {
+		padding: 2rem;
+	}
+}

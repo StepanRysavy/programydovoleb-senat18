@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  background: #fafafa;
+  font-size: 100%; 
+}
+
+a {
+	text-decoration: none;
+	color: #3c2e8d;
+}
+
+.feedback .note a {
+	color: #fff;
+    text-decoration: underline; 
+    text-underline-position: under;
+}
+
+.transparent,
+.opaque {
+	position: relative;
+}
+
+.opaque {
+	 background: #fafafa;
+	 padding-top: 2rem;
+}
+
+.inner {
+  max-width: 50rem;
+  margin: auto;
+}
+
+.transparent > .inner {
+	padding-bottom: 4rem;
+}

@@ -1,0 +1,19 @@
+<div class="feedback">
+	<div class="content">
+		<h2 @click="handleClick">{{ B('feedback.cta') }}</h2>
+		<div class="form feedback-form" v-if="$store.state.showFeedback">
+			<div class="cover" @click="handleClick"></div>
+			<div class="float">
+				<h3 v-html="headline"></h3>
+				<show-form :data="fields"></show-form>
+				<p class="note" v-html="B('feedback.gdpr')"></p>
+				<hr>
+				<div class="footer">
+					<button-confirm :data="cancelButton"></button-confirm>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+

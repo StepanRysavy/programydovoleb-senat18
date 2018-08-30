@@ -1,0 +1,30 @@
+
+
+.content {
+	padding: .5rem 1rem;
+	border-bottom: 1px solid #eee;
+	background: #f4f4f4;
+
+	font-size: 11px;
+	color: #888;
+}
+
+h2 {
+	display: none;
+}
+
+a {
+	color: #888;
+	text-decoration: none;
+}
+
+a + a {
+	margin-left: .5rem;
+}
+
+@media (min-width: 320px) {
+	.categories, .tags, .location {
+		display: inline-block;
+		margin-right: 1rem;
+	}
+}

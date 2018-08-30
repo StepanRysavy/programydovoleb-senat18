@@ -1,0 +1,9 @@
+<div class="form-input-checkbox">
+	<div class="form-input-content">
+		<input type="checkbox" v-model="checked" v-on="inputListeners"> {{data.label}} {{data.required ? '*' : ''}}
+	</div>
+	<div class="form-input-error">
+		{{data.error}}
+	</div>
+</div>
+

@@ -1,0 +1,35 @@
+<div id="app" :class="$store.state.admin ? 'admin' : ''">
+  <show-cover :path="$store.state.cover"></show-cover>
+  <img src="/static/SVG/logo-nasjirak.svg" alt="" width="160" height="160" class="app-logo" @click="handleClickLogo" v-if="$store.state.admin === false">
+  <div class="loaded main" v-if="$store.state.loaded">
+  	<router-view></router-view> 
+  </div>
+  <div class="opaque" v-if="$store.state.loaded">
+    <div class="inner">
+      <div class="footer" v-if="$store.state.admin === false">
+        <div class="content">
+          <hr>
+          <div class="footer-about" v-html="B('app.footer')"></div>
+          <div class="footer-language">
+            <button @click="handleClickLangEnglish">english</button>
+            &middot;
+            <button @click="handleClickLangCzech">čeština</button>
+            &middot;
+            &middot;
+            &middot;
+            <router-link to="/info" tag="button">{{ B('static.aboutHeadline') }}</router-link>
+            &middot;
+            <router-link to="/gdpr" tag="button">{{ B('static.gdprHeadline') }}</router-link>
+          </div>
+          <div class="footer-copy">
+            &copy; Katka a Štepán
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="app-feedback" v-if="$store.state.admin === false">
+  	<!-- <show-feedback :data="{meta: {type: 'app', id: '-1'}, name: 'Náš Jiřák'}"></show-feedback> -->
+  </div>
+	
+</div>

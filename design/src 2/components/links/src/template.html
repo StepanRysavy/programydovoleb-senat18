@@ -1,0 +1,8 @@
+<div class="links">
+	<div class="content">
+		<div class="link" v-for="(link, index) in data">
+			<a :href="link.src" target="_blank">{{ link.name[$store.state.language] }}</a> <span class="link-src">&middot; {{ link.src }}</span>
+		</div>
+	</div>
+</div>
+

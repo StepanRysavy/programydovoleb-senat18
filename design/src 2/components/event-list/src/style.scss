@@ -1,0 +1,37 @@
+.content {
+	padding: 1rem;
+}
+
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -5px;
+}
+
+.flex-item {
+	width: 50%;
+}
+
+.flex-item .event-holder {
+	margin: 5px;
+}
+
+.event-list + .event-list:not(:empty) {
+	margin-top: 2rem;
+}
+
+.event-list.event-list-priority-5 .event-holder + .event-holder {
+	margin-top: 1rem;
+}
+
+.event-list.event-list-priority-3 .event-holder + .event-holder {
+	margin-top: .5rem;
+}
+
+.icon {
+	width: 2rem;
+	height: 2rem;
+	border: 1px solid #3c2e8d;
+	border-radius: 50%;
+	margin: 2rem auto 3rem auto;
+}

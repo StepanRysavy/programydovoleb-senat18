@@ -1,0 +1,58 @@
+<div class="search">
+
+	<div class="transparent">
+		<div class="inner">
+
+			<div class="header">
+				<h1>{{ headline }}</h1>
+			</div>
+
+			<div class="prominent" v-if="limitedOpenedVenues.length > 0">
+				<div class="prominent-item" v-for="(data, index) in limitedOpenedVenues">
+					<show-event v-if="data.meta.type === 'event'" :data="data" :level="4"></show-event>	
+					<show-company v-if="data.meta.type === 'company'" :data="data" :level="4"></show-company>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="opaque">
+		<div class="inner">
+			<div class="all">
+				<h2 v-html="B('search.headline')"></h2>
+				<ul class="columns">
+					<li v-for="(data, itemIndex) in companies.filter((item) => item.opened.status === true)">
+						<div class="list-item">
+							<show-event v-if="data.meta.type === 'event'" :data="data" :level="1"></show-event>	
+							<show-company v-if="data.meta.type === 'company'" :data="data" :level="1"></show-company>
+						</div>
+					</li>
+					<li class="search-list-divider"><hr style="margin: 2rem 1rem"></li>
+					<li v-for="(data, itemIndex) in companies.filter((item) => item.opened.status === false)">
+						<div class="list-item">
+							<show-event v-if="data.meta.type === 'event'" :data="data" :level="1"></show-event>	
+							<show-company v-if="data.meta.type === 'company'" :data="data" :level="1"></show-company>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="help" v-if="others.length > 0">
+				
+				<template v-for="(data, index) in others">
+					
+					<router-link :to="'/' + metaType.charAt(0) + '/' + data.id">
+						{{ data[$store.state.language] }}
+					</router-link>
+
+					<span v-if="index < others.length - 1">&middot;</span>
+
+				</template>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+

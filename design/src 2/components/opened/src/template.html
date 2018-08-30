@@ -1,0 +1,32 @@
+<div class="opened">
+	<div class="content" v-if="anyData || (data.note && data.note[$store.state.language].length > 1)">
+		<template v-if="anyData" v-for="(time, index) in regular">
+			<div class="opened-regular" :class="index === $store.state.current.day.dayOfWeek ? 'opened__today' : ''">
+				<span class="opened-date">
+					{{ B('days.' + index) }}
+				</span> 
+				<span class="opened-times">
+					<template v-if="time.length > 0" v-for="(clock, index) in time">
+						{{ beautifyHours(clock[0]) }} – {{ beautifyHours(clock[1]) }}
+						<span v-if="index < time.length - 1">&middot;</span>
+					</template>
+					<span v-if="time.length === 0" class="text__warning">{{ B('days.closed') }}</span>
+				</span>
+			</div>
+		</template>
+		<template v-if="data.special" v-for="(time, index) in data.special">
+			<div class="opened-special">
+				<span class="opened-date"> {{ date(new Date(time.date)) }}</span>
+				<span class="opened-times">
+					<template v-if="time.times.length > 0" v-for="(clock, index) in time.times">
+						{{ beautifyHours(clock[0]) }} – {{ beautifyHours(clock[1]) }}
+					</template>
+					<span v-if="time.times.length === 0" class="text__warning">{{ B('days.closed') }}</span>
+				</span>
+				<span v-if="time.name">: {{ time.name }}</span>
+			</div>
+		</template>
+		<div class="opened-note" v-if="data.note && data.note[$store.state.language].length > 1" v-html="data.note[$store.state.language]"></div>
+	</div>
+</div>
+

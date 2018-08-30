@@ -1,0 +1,16 @@
+<div class="contacts">
+	<div class="content">
+		<div>
+			<span class="contact-label">
+				{{ B('contacts.address') }}:
+			</span>
+			{{ data.address ? data.address : $store.state.meta.house.find(item => item.id === house).address }}
+			
+		</div>
+		<div v-if="data.phone"><span class="contact-label">{{ B('contacts.phone') }}:</span><span class="contact-phone" v-html="phone(data.phone)"></span></div>
+		<div v-if="data.mobile"><span class="contact-label">{{ B('contacts.mobile') }}:</span><span class="contact-phone" v-html="phone(data.mobile)"></span></div>
+		<div v-if="data.email"><span class="contact-label">{{ B('contacts.email') }}:</span><a :href="'mailto:data.email'">{{ data.email }}</a></div>
+		<div v-if="data.web"><span class="contact-label">{{ B('contacts.web') }}:</span><a :href="data.web">{{ data.web }}</a></div>
+	</div>
+</div>
+

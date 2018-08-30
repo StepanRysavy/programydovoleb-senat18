@@ -1,0 +1,26 @@
+.opened-relative-msg + .opened-relative-msg:before {
+	content: '\00B7';
+}
+
+.opened-relative-msg__opened {
+	font-weight: bold;
+	color: #00a901;
+}
+
+.opened-relative-msg__closed {
+	font-weight: bold;
+	color: #DC0001;
+}
+
+.opened-relative:empty {
+	display: none;
+}
+
+.opened-relative-note {
+	font-size: .84rem;
+
+}
+
+.level-1 .opened-relative-note {
+	font-size: 11px;
+}

@@ -1,0 +1,87 @@
+<div class="admin">
+	<div class="admin-menu">
+		<p v-if="result" class="result">{{ result }}</p>
+		<div class="admin-menu-company">
+			<h1>Firmy <button @click="ctco">v</button> <button @click="show('company', -1)">přidat</button></h1>
+			<div class="list" v-if="tco === true">
+				<template v-for="(data, index) in companies">
+					<h2 v-html="data.name" @click="show('company', data.id)" :class="data.meta.active ? 'is-active' : 'is-disabled'"></h2>
+				</template>
+			</div>
+		</div>	
+		<div class="admin-menu-event">
+			<h1>Články <button @click="cte">v</button> <button @click="show('event', -1)">přidat</button></h1>
+			<div class="list" v-if="te === true">
+				<template v-for="(data, index) in events">
+					<h2 v-html="data.name" @click="show('event', data.id)" :class="data.meta.active ? 'is-active' : 'is-disabled'"></h2>
+				</template>
+			</div>
+		</div>
+		<div class="admin-menu-category">
+			<h1>Kategorie <button @click="ctc">v</button></h1>
+			<div class="list" v-if="tc === true">
+				<template v-for="(data, index) in categories">
+					<h2>{{ data.cs }}</h2>
+				</template>
+			</div>
+			<div class="form">
+				<div><input type="text" placeholder="česky" ref="category_cs"></div>
+				<div><input type="text" placeholder="anglicky" ref="category_en"></div>
+				<div><button @click="handleClick_categoryAdd">Přidat</button></div>
+			</div>
+		</div>
+		<div class="admin-menu-tags">
+			<h1>Tagy <button @click="ctt">v</button></h1>
+			<div class="list" v-if="tt === true">
+				<template v-for="(data, index) in tags">
+					<h2>{{ data.cs }}</h2>
+				</template>
+			</div>
+			<div class="form">
+				<div><input type="text" placeholder="česky" ref="tags_cs"></div>
+				<div><input type="text" placeholder="anglicky" ref="tags_en"></div>
+				<div><button @click="handleClick_tagsAdd">Přidat</button></div>
+			</div>
+		</div>
+		<div class="admin-menu-block">
+			<h1>Bloky <button @click="ctb">v</button></h1>
+			<div class="list" v-if="tb === true">
+				<template v-for="(data, index) in blocks">
+					<h2>{{ data.cs }}</h2>
+				</template>
+			</div>
+			<div class="form">
+				<div><input type="text" placeholder="česky" ref="block_cs"></div>
+				<div><input type="text" placeholder="anglicky" ref="block_en"></div>
+				<div><button @click="handleClick_blockAdd">Přidat</button></div>
+			</div>
+		</div>
+		<div class="admin-menu-house">
+			<h1>Domy <button @click="cth">v</button></h1>
+			<div class="list" v-if="th === true">
+				<template v-for="(data, index) in houses">
+					<h2>{{ data.address }}</h2>
+				</template>
+			</div>
+			<div class="form">
+				<div><input type="text" placeholder="adresa" ref="house"></div>
+				<div><button @click="handleClick_houseAdd">Přidat</button></div>
+			</div>
+		</div>
+		<hr>
+		<button @click="handleClick_generateSitemap">Generate sitemap</button>
+	</div>
+	<div class="admin-view">
+		<edit-company 
+			v-if="type === 'company'" 
+			:data="$store.state.structure.companies.find(item => item.id === id)" 
+			v-on:saved="savedCompany"
+		></edit-company>
+		<edit-event 
+			v-if="type === 'event'" 
+			:data="$store.state.structure.events.find(item => item.id === id)"
+			v-on:saved="savedEvent"
+		></edit-event>
+	</div>
+</div>
+

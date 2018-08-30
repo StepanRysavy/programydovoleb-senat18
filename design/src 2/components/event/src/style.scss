@@ -1,0 +1,129 @@
+.event:not(.level-5),
+.event.level-5 .event-content {
+    border-radius: 4px;
+	border: 1px solid #eee;
+	max-width: 50rem;
+	margin: auto;
+	background: #fff;
+	padding: 0;
+	position: relative;
+}
+
+h1 {
+	margin: 0;
+	font-weight: normal;
+	font-size: 1.5rem;
+}
+
+a {
+	text-decoration: none;
+	color: #3c2e8d;
+}
+
+.header-main {
+  margin: 0 0 4rem 0;
+
+	h1 {
+	  text-align: center;
+	  font-size: 2rem;
+	  font-weight: 100;
+	  color: #3c2e8d;
+	  margin: 0;
+	}
+}
+
+.event.level-1 {
+	border-radius: 0;
+	border: none;
+	background: none;
+	padding: 0 1rem;
+
+	h1 {
+		font-size: 1rem;
+		font-weight: bold;
+	}
+
+	.opened-relative {
+		font-size: 11px;
+	}
+
+	.header {
+		padding: 0;
+		border-bottom: none;
+	}
+}
+
+.event-list .event.level-2 {
+	border-radius: 0;
+	border: none;
+	background: none;
+
+	.opened-relative {
+		font-size: 11px;
+	}
+
+	.header {
+		padding: 0;
+		border-bottom: none;
+	}
+}
+
+.header {
+	padding: 2rem 1rem;
+	position: relative;
+	border-bottom: 1px solid #eee;
+
+	@media (min-width: 35rem) {
+		padding: 2rem;
+	}
+}
+
+.content {
+	padding: 1rem;
+	border-bottom: 1px solid #eee;
+
+	&:empty {
+		display: none;
+	}
+}
+
+@media (min-width: 50rem) {
+	.content {
+		padding: 2rem;
+	}
+}
+
+.header + .info {
+	border-bottom: 1px solid #eee;
+}
+
+.event.level-5 {
+	.opened-relative {
+		text-align: center;
+	}
+
+	.header {
+		padding: 0;
+		border-bottom: none;
+	}
+}
+
+.comment-nasjirak {
+
+	padding: 2rem;
+
+	blockquote {
+		font-family: Georgie, sans;
+		font-style: italic;
+		font-size: 1.25rem;
+		padding: 0 35% .5rem 0;
+		margin: 0;
+	}
+
+	span {
+		display: block;
+		padding: 0 0 0 2rem;
+		font-size: .84rem;
+		color: #888;
+	}
+}

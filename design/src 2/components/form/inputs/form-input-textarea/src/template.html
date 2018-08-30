@@ -1,0 +1,16 @@
+<div class="form-input-text">
+	<div class="form-input-header">
+		{{data.label}} {{data.required ? '*' : ''}}
+	</div>
+	<div class="form-input-content">
+		<textarea :type="htmlType"
+			v-bind:value="data.value"
+        	v-on="inputListeners"
+        	:placeholder="data.placeholder"
+        ></textarea>
+	</div>
+	<div class="form-input-error" v-if="loaded">
+		{{data.error.join(" | ")}}
+	</div>
+</div>
+

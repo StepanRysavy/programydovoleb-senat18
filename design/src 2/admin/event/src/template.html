@@ -1,0 +1,461 @@
+<div class="event">
+	<div class="flex" v-if="full">
+		<div class="form">
+			<table>
+				<tr>
+					<th>Článek</th>
+					<td>{{ full.id === 999999 ? 'Nový' : 'id: ' + full.id }}</td>
+					<td>
+						<button @click="handleClickLangEnglish">english</button>
+						&middot;
+						<button @click="handleClickLangCzech">čeština</button>
+				  		&middot;
+				  		<input type="range" v-model.number="level" min="1" max="5">
+					</td>
+				</tr>
+				<tr>
+					<th colspan="3">Základní informace</th>
+				</tr>
+				<tr>
+					<th>URL Hash</th>
+					<td><input type="text" v-model="full.hash"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Jméno</th>
+					<td><input type="text" v-model="full.name"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Obsah</th>
+					<td><textarea v-model="full.content.cs" placeholder="česky"></textarea></td>
+					<td><textarea v-model="full.content.en" placeholder="anglicky"></textarea></td>
+				</tr>
+				<tr>
+					<th colspan="3">Aktualizace</th>
+				</tr>
+				<tr v-for="(update, index) in full.updates">
+					<td colspan="2">
+						{{ update.name.cs }} &middot; {{ update.name.en }}
+					</td>
+					<td>
+						<button @click="handleClick_UpdateRemove(index)">Odstranit</button>
+					</td>
+				</tr>
+				<tr>
+					<th colspan="3">Přidat aktualizaci</th>
+				</tr>
+				<tr>
+					<th>Datum</th>
+					<th><input type="date" ref="update_date"></th>
+				</tr>
+				<tr>
+					<th>Název</th>
+					<td><input ref="update_name_cs" placeholder="česky"></td>
+					<td><input ref="update_name_en" placeholder="anglicky"></td>
+				</tr>
+				<tr>
+					<th>Popis</th>
+					<td><textarea ref="update_content_cs" placeholder="česky"></textarea></td>
+					<td><textarea ref="update_content_en" placeholder="anglicky"></textarea></td>
+				</tr>
+				<tr>
+					<th>Zdroj</th>
+					<td colspan="2"><input ref="update_source_src" placeholder="odkaz"> <input ref="update_source_type" placeholder="popis odkazu"></td>
+				</tr>
+				<tr>
+					<td><button @click="handleClick_UpdateAdd">Přidat</button></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th colspan="3">Meta</th>
+				</tr>
+				<tr>
+					<th>Kategorie</th>
+					<td colspan="2">
+						<select ref="category">
+							<option value="" disabled="">vyber</option>
+							<option v-if="$store.state.meta.category.length > 0" v-for="(category, index) in sortedCategory" :value="category.id">{{ category.cs }}</option>
+						</select>
+						<button @click="handleClick_CategoryAdd">Přidat</button>
+						
+						<div class="selected">
+							<span v-if="full.meta.category.length > 0" v-for="(id, index) in full.meta.category">
+								{{ $store.state.meta.category.find(item => item.id === id).cs }} 
+								<button @click="handleClick_CategoryRemove(index)">x</button> 
+								<span v-if="index + 1 < full.meta.category.length">&middot;</span>
+							</span>
+						</div>
+
+					</td>
+				</tr>
+				<tr>
+					<th>Tagy</th>
+					<td colspan="2">
+						<select ref="tags">
+							<option value="" disabled="">vyber</option>
+							<option v-if="$store.state.meta.tags.length > 0" v-for="(tags, index) in sortedTags" :value="tags.id">{{ tags.cs }}</option>
+						</select>
+						<button @click="handleClick_TagsAdd">Přidat</button>
+
+						<div class="selected">
+							<span v-if="full.meta.tags.length > 0" v-for="(id, index) in full.meta.tags">
+								#{{ $store.state.meta.tags.find(item => item.id === id).cs }} 
+								<button @click="handleClick_TagsRemove(index)">x</button>
+								<span v-if="index + 1 < full.meta.tags.length">&middot;</span>
+							</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>Blok</th>
+					<td>
+						<select v-model.number="full.meta.block">
+							<option v-for="(block, index) in sortedBlock" :value="block.id">{{ block.cs }}</option>
+						</select>
+					</td>
+					<td v-if="$store.state.meta.block.find(item => item.id === Number(full.meta.block))">
+						{{ $store.state.meta.block.find(item => item.id === Number(full.meta.block)).cs }}
+					</td>
+				</tr>
+				<tr>
+					<th>Dům</th>
+					<td>
+						<select v-model.number="full.meta.house">
+							<option v-for="(house, index) in sortedHouse" :value="house.id">{{ house.address }}</option>
+						</select>
+					</td>
+					<td v-if="$store.state.meta.house.find(item => item.id === Number(full.meta.house))">
+						{{ $store.state.meta.house.find(item => item.id === Number(full.meta.house)).address }}
+					</td>
+				</tr>
+				<tr>
+					<th>Priorita</th>
+					<td><input type="range" v-model="full.meta.priority" min="1" max="5"></td>
+					<td>{{ full.meta.priority }}</td>
+				</tr>
+				<tr>
+					<th colspan="3">Otevírací doba</th>
+				</tr>
+				<tr v-for="(time, index) in full.opened.special">
+					<td>
+						{{ date(new Date(time.date)) }} <span v-if="time.name"><br>{{ time.name }}</span>
+					</td>
+					<td>
+						<template v-if="time.times.length > 0" v-for="(clock, index) in time.times">
+							{{ beautifyHours(clock[0]) }} – {{ beautifyHours(clock[1]) }}
+						</template>
+						<span v-if="time.times.length === 0" class="text__warning">{{ B('days.closed') }}</span>
+					</td>
+					<td>
+						<button @click="handleClick_SpecialRemove(index)">Odstranit</button>
+					</td>
+				</tr>
+				<tr>
+					<th colspan="3">Přidat otevírací dobu</th>
+				</tr>
+				<tr>
+					<th>Datum</th>
+					<td><input type="date" ref="special_date"></td>
+				</tr>
+				<tr>
+					<th>Čas</th>
+					<td><input type="text" ref="special_time"></td>
+				</tr>
+				<tr>
+					<th>Důvod</th>
+					<td><input type="text" ref="special_name"></td>
+				</tr>
+				<tr>
+					<td><button @click="handleClick_SpecialAdd">Přidat</button></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th colspan="3">Poznámka k otevírací době</th>
+				</tr>
+				<tr>
+					<th>Poznámka</th>
+					<td><textarea v-model="full.opened.note.cs" placeholder="česky"></textarea></td>
+					<td><textarea v-model="full.opened.note.en" placeholder="anglicky"></textarea></td>
+				</tr>
+				<!-- <tr>
+					<th colspan="3">Kontakty</th>
+				</tr>
+				<tr>
+					<th>Adresa</th>
+					<td><input type="text" v-model="full.contact.address"></td>
+				</tr>
+				<tr>
+					<th>Mobil</th>
+					<td><input type="number" v-model="full.contact.mobile"></td>
+				</tr>
+				<tr>
+					<th>Web</th>
+					<td><input type="url" v-model="full.contact.web"></td>
+				</tr>
+				<tr>
+					<th>Email</th>
+					<td><input type="email" v-model="full.contact.email"></td>
+				</tr>
+				<tr>
+					<th>Pevná linka</th>
+					<td><input type="number" v-model="full.contact.phone"></td>
+				</tr> -->
+				<tr>
+					<th colspan="3">Kontakty</th>
+				</tr>
+				<tr v-for="(contact, index) in full.contactsCustom">
+					<td colspan="3">
+
+						<button @click="full.contactsCustom.move(index, index - 1)" :disabled="index === 0">&uarr;</button>
+						<button @click="full.contactsCustom.move(index, index + 1)" :disabled="index === full.contactsCustom.length - 1">&darr;</button>
+
+						<input type="text" v-model="contact.label.cs"> &middot;
+						<input type="text" v-model="contact.label.en"> &middot;
+						<input type="text" v-model="contact.content"> &middot;
+						
+						({{ contact.type }})
+						
+						&middot;
+
+						<button @click="handleClick_ContactsCustomRemove(index)">Odstranit</button>
+					</td>
+				</tr>
+				<tr>
+					<th colspan="3">Přidat kontakt</th>
+				</tr>
+				<tr>
+					<th>Popis</th>
+					<td><input ref="contactsCustom_cs" placeholder="česky"></td>
+					<td><input ref="contactsCustom_en" placeholder="anglicky"></td>
+				</tr>
+				<tr>
+					<th>Hodnota</th>
+					<td><input type="text" ref="contactsCustom_content"></td>
+				</tr>
+				<tr>
+					<th>Formátování</th>
+					<td>
+						<select ref="contactsCustom_type">
+							<option value="" disabled="">Vyber</option>
+							<option value="url">URL</option>
+							<option value="email">Email</option>
+							<option value="phone">Telefonni cislo</option>
+							<option value="plain">Obyčejný text</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><button @click="handleClick_ContactsCustomAdd">Přidat</button></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th colspan="3">Sociální media</th>
+				</tr>
+				<tr>
+					<th>Facebook</th>
+					<td><input type="text" v-model="full.social.facebook"></td>
+				</tr>
+				<tr>
+					<th>Instagram</th>
+					<td><input type="text" v-model="full.social.instagram"></td>
+				</tr>
+				<tr>
+					<th>Twitter</th>
+					<td><input type="text" v-model="full.social.twitter"></td>
+				</tr>
+				<tr>
+					<th>Youtube</th>
+					<td><input type="text" v-model="full.social.youtube"></td>
+				</tr>
+				<tr>
+					<th colspan="3">Benefity</th>
+				</tr>
+				<tr>
+					<th>Wifi</th>
+					<td colspan="2">
+						<input type="checkbox" v-model="full.perks.wifi"> zdarma
+					</td>
+				</tr>
+				<tr>
+					<th>Zahrádka</th>
+					<td colspan="2">
+						<input type="checkbox" v-model="full.perks.garden"> v provozu
+					</td>
+				</tr>
+				<tr>
+					<th>Zvířátka</th>
+					<td colspan="2">
+						<input type="checkbox" v-model="full.perks.pets"> vítána
+					</td>
+				</tr>
+				<tr>
+					<th>Hendikepovaní</th>
+					<td colspan="2">
+						<input type="checkbox" v-model="full.perks.accessible"> dostupné
+					</td>
+				</tr>
+				<tr>
+					<th>Karty</th>
+					<td colspan="2">
+						<input type="checkbox" v-model="full.perks.cards.mastercard"> MC,
+						<input type="checkbox" v-model="full.perks.cards.visa"> Visa,
+						<input type="checkbox" v-model="full.perks.cards.americanexpress"> AmericanExpress,
+						<input type="checkbox" v-model="full.perks.cards.dinersclub"> DinersClub,
+						<input type="checkbox" v-model="full.perks.cards.jcb"> JCB,
+						<input type="checkbox" v-model="full.perks.cards.discover"> Discover
+					</td>
+				</tr>
+				<tr>
+					<th>Stravenky</th>
+					<td colspan="2">
+						<input type="checkbox" v-model="full.perks.cheques.sodexo"> Sodexo,
+						<input type="checkbox" v-model="full.perks.cheques.ticket"> Ticket,
+						<input type="checkbox" v-model="full.perks.cheques.sekservis"> ŠekServis,
+						<input type="checkbox" v-model="full.perks.cheques.cadhoc"> Cadhoc,
+						<input type="checkbox" v-model="full.perks.cheques.unisek"> Unišek,
+						<input type="checkbox" v-model="full.perks.cheques.checques"> Chèque Déjeuner,
+						<br>
+						<input type="checkbox" v-model="full.perks.cheques.cafeteria">Cafeteria,
+						<input type="checkbox" v-model="full.perks.cheques.edenred"> Edenred,
+						<input type="checkbox" v-model="full.perks.cheques.flexi"> Flexi
+					</td>
+				</tr>
+				<tr>
+					<th>Kryptoměny</th>
+					<td colspan="2">
+						<input type="checkbox" v-model="full.perks.crypto.bitcoin"> Bitcoin
+					</td>
+				</tr>
+				<tr>
+					<th colspan="3">Odkazy</th>
+				</tr>
+				<template v-for="(link, index) in full.links">
+					<tr class="link-edit-simplified">
+						<td colspan="3">
+							<button @click="full.links.move(index, index - 1)" :disabled="index === 0">&uarr;</button>
+							<button @click="full.links.move(index, index + 1)" :disabled="index === full.links.length - 1">&darr;</button>
+							url: <input type="text" v-model="link.src"> <a :href="link.src" target="_blank">Test</a>
+							&middot;
+							cs: <input type="text" v-model="link.name.cs">
+							&middot;
+							en: <input type="text" v-model="link.name.en">
+							&middot;
+							<button @click="handleClick_LinkRemove(index)">Odstranit</button>
+						</td>
+					</tr>
+
+					<!--
+					<tr class="link-edit link-edit-first">
+						<th>URL</th>
+						<td colspan="2"><input type="text" v-model="link.src"> <a :href="link.src" target="_blank">Test</a></td>
+					</tr>
+					<tr class="link-edit">
+						<th>CS</th>
+						<td colspan="2"><input type="text" v-model="link.name.cs"></td>
+					</tr>
+					<tr class="link-edit">
+						<th>EN</th>
+						<td colspan="2"><input type="text" v-model="link.name.en"></td>
+					</tr>
+					<tr class="link-edit link-edit-last">
+						<td>
+							<button @click="full.links.move(index, index - 1)" :disabled="index === 0">&uarr;</button>
+							<button @click="full.links.move(index, index + 1)" :disabled="index === full.links.length - 1">&darr;</button>
+						</td>
+						<td colspan="2"><button @click="handleClick_LinkRemove(index)">Odstranit</button></td>
+					</tr>
+					-->
+				</template>
+				<tr>
+					<th colspan="3">Přidat odkaz</th>
+				</tr>
+				<tr>
+					<th>Odkaz</th>
+					<td><input type="text" ref="link_src"></td>
+				</tr>
+				<tr>
+					<th>Popis</th>
+					<td><textarea ref="link_cs" placeholder="česky"></textarea></td>
+					<td><textarea ref="link_en" placeholder="anglicky"></textarea></td>
+				</tr>
+				<tr>
+					<td><button @click="handleClick_LinkAdd">Přidat</button></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th colspan="3">Komentář</th>
+				</tr>
+				<tr>
+					<th>Komentář</th>
+					<td><textarea v-model="full.comment.nasjirak.cs" placeholder="česky"></textarea></td>
+					<td><textarea v-model="full.comment.nasjirak.en" placeholder="anglicky"></textarea></td>
+				</tr>
+				<tr>
+					<th colspan="3">Visual</th>
+				</tr>
+				<tr v-for="(img, index) in full.images.visual">
+					<td colspan="3">
+						{{ img.min || '0'}}px : {{ img.src }} <button @click="handleClick_VisualRemove(index)">Odstranit</button>
+						<br>
+						<img :src="img.src" class="visual">
+					</td>
+				</tr>
+				<tr>
+					<th colspan="3">Přidat obrázek visuálu</th>
+				</tr>
+				<tr>
+					<th>Responsive od</th>
+					<td><input type="number" min="0" max="1920" ref="visual_min" value="0"> px</td>
+					<td rowspan="5">
+						<div class="dropzone">
+							<upload-dropzone v-on:upload="dropzone_upload"></upload-dropzone>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>URL</th>
+					<td><input type="text" ref="visual_src" placeholder="url" style="width: 100%"></td>
+				</tr>
+				<tr>
+					<th>Šířka</th>
+					<td><input type="number" ref="visual_width" placeholder="šířka" min="0" max="2560"> px</td>
+				</tr>
+				<tr>
+					<th>Výška</th>
+					<td><input type="number" ref="visual_height" placeholder="výška" min="0" max="2560"> px</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><button @click="handleClick_VisualAdd">Přidat</button></td>
+				</tr>
+				<tr>
+					<th colspan="3">Správa</th>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button @click="handleClick_Save" :disabled="full.name.length === 0">Publikovat</button>
+						<button @click="handleClick_Deactivate" :disabled="full.name.length === 0">Uložit jako koncept</button>
+					</td>
+					<td style="text-align: right">
+						<button v-if="full.id != 999999" @click="handleClick_Deactivate">Deaktivovat</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="preview">
+			<show-event :data="full" :level="level"></show-event>
+		  	<div class="footer-language">
+		  		<button @click="handleClickLangEnglish">english</button>
+		  		&middot;
+		  		<button @click="handleClickLangCzech">čeština</button>
+		  		&middot;
+		  		<input type="range" v-model.number="level" min="1" max="5">
+		  	</div>
+		</div>
+	</div>
+</div>
+

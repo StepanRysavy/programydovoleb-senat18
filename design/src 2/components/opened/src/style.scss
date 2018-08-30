@@ -1,0 +1,49 @@
+.opened-date {
+	width: 8em;
+	display: inline-block;
+}
+
+.content {
+	padding: 1rem;
+	border-bottom: 1px solid #eee;
+}
+
+.opened-regular + .opened-special {
+	margin-top: .5rem;
+}
+
+.opened-special {
+	font-weight: bold;
+}
+
+.opened__today .opened-date {
+	font-weight: bold;
+	color: #3c2e8d;
+}
+
+.opened-regular .text__warning {
+	color: #DC0001;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: .04em;
+}
+
+@media (min-width: 50rem) {
+	.content {
+		padding: 2rem;
+	}
+}
+
+.opened-note {
+	font-size: .84em;
+	font-weight: bold;
+}
+
+div + .opened-note {
+	margin-top: 1rem;
+}
+
+.opened-times span {
+	display: inline-block;
+	margin: 0 .5em;
+}

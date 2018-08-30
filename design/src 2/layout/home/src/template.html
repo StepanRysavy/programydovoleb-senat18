@@ -1,0 +1,66 @@
+<div class="home" :class="{loading: limitedOpenedVenues.length === 0}">
+
+	<div class="transparent">
+		<div class="inner">
+			<div class="header">
+				<h1>Náš Jiřák</h1>
+			</div>
+
+			<div class="prominent" v-if="limitedOpenedVenues.length > 0" :class="{'has-events': events.length > 0 && limitedOpenedVenues.length === 3}">
+
+				<div class="prominent-item" v-for="(data, index) in events">
+					<show-event v-if="data.meta.type === 'event'" :data="data" :level="4"></show-event>	
+				</div>
+
+				<div class="prominent-block">
+					<div class="prominent-item" v-for="(data, index) in limitedOpenedVenues">
+						<show-company v-if="data.meta.type === 'company'" :data="data" :level="4"></show-company>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<div class="opaque">
+		<div class="inner">
+			<div class="all">
+				<ul class="home-list">
+					<li v-for="(category, categoryIndex) in categories_list">
+						<div class="category" ref="categoryList">
+							<h2>{{ category.meta[$store.state.language] }} <button @click="toggleCategory(categoryIndex)">+</button></h2>
+							<ul class="columns">
+								<li v-for="(data, itemIndex) in items_list(category.list).filter((item) => item.opened.status === true)">
+									<div class="list-item">
+										<show-event v-if="data.meta.type === 'event'" :data="data" :level="1"></show-event>	
+										<show-company v-if="data.meta.type === 'company'" :data="data" :level="1"></show-company>
+									</div>
+								</li>
+								<li class="divider"><hr style="margin: 2rem 1rem"></li>
+								<li v-for="(data, itemIndex) in items_list(category.list).filter((item) => item.opened.status === false)">
+									<div class="list-item">
+										<show-event v-if="data.meta.type === 'event'" :data="data" :level="1"></show-event>	
+										<show-company v-if="data.meta.type === 'company'" :data="data" :level="1"></show-company>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li v-if="events.length > 0">
+						<div class="category events">
+							<h2>{{ B('events.home') }}</h2>
+							<ul class="columns">
+								<li v-for="(data, itemIndex) in events">
+									<div class="list-item">
+										<show-event :data="data" :level="1"></show-event>	
+									</div>
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+

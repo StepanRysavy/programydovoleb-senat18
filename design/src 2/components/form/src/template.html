@@ -1,0 +1,24 @@
+<div class="form">
+	
+	<div class="form-header">
+		<h1>{{data.headline}}</h1>
+		<p class="form-error">{{data.error}}</p>
+	</div>
+	<div class="form-inputs">
+		<template v-for="(field, index) in data.fields">
+			<form-input-text :data="field" v-if="field.type === 'text'" :validate="validate" v-on:update="formEmitedUpdate"></form-input-text>
+			<form-input-textarea :data="field" v-if="field.type === 'textarea'" :validate="validate" v-on:update="formEmitedUpdate"></form-input-textarea>
+			<form-input-radio :data="field" v-if="field.type === 'radio'" :validate="validate" v-on:update="formEmitedUpdate"></form-input-radio>
+			<form-input-checkbox :data="field" v-if="field.type === 'checkbox'" :validate="validate" v-on:update="formEmitedUpdate"></form-input-checkbox>
+			<form-input-select :data="field" v-if="field.type === 'select'" :validate="validate" v-on:update="formEmitedUpdate"></form-input-select>
+			<form-input-label :data="field" v-if="field.type === 'label'" :validate="validate" v-on:update="formEmitedUpdate"></form-input-label>
+		</template>
+	</div>
+	<div class="form-footer">
+		<template v-for="(button, index) in data.buttons">
+			<button-confirm :data="button" :disabled="!valid" v-if="button.type === 'confirm'"></button-confirm>
+		</template>
+	</div>
+
+</div>
+

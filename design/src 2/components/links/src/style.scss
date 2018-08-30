@@ -1,0 +1,35 @@
+.content {
+	padding: 1rem;
+	border-bottom: 1px solid #eee;
+}
+
+.link-src {
+	color: #fff;
+	font-size: 11px;
+	transition: .5s color;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-width: 20rem;
+	position: relative;
+	top: .2rem;
+	display: none;
+}
+
+.link:hover .link-src {
+	color: #888;
+}
+
+.link + .link {
+	margin-top: .5rem;
+}
+
+@media (min-width: 50rem) {
+	.content {
+		padding: 2rem;
+	}
+
+	.link-src {
+		display: inline-block;
+	}
+}

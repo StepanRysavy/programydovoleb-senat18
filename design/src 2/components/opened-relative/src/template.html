@@ -1,0 +1,12 @@
+<div class="opened-relative">
+	<div class="opened-relative-data" v-if="anyData">
+		<span class="opened-relative-msg opened-relative-main" v-if="hideClose != true" :class="status.opened ? 'opened-relative-msg__opened' : 'opened-relative-msg__closed'">
+			{{ message.main }}
+		</span>
+		<span class="opened-relative-msg opened-relative-extra" v-if="message.extra">
+			{{ message.extra }}
+		</span>
+	</div>
+	<div class="opened-relative-note" v-if="data.note && data.note[$store.state.language].length > 1" v-html="data.note[$store.state.language]"></div>
+</div>
+

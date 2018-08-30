@@ -1,0 +1,38 @@
+<div class="meta">
+	<div class="content">
+		<h2>Meta</h2>
+
+		<div class="categories" v-if="data.category.length > 0">
+			<template v-for="(id, index) in data.category">
+				<router-link :to="'/c/' + id">{{ dataCategory(id)[$store.state.language] }}</router-link>
+			</template>
+		</div>
+
+		<div class="tags" v-if="data.tags.length > 0">
+			<template v-for="(id, index) in data.tags">
+				<router-link :to="'/t/' + id">#{{ dataTags(id)[$store.state.language] }}</router-link>
+			</template>
+		</div>
+
+		<!--
+
+		<div class="location" v-if="dataBlock(data.block)">
+			<router-link :to="'/b/' + data.block">
+				{{ dataBlock(data.block)[$store.state.language] }}
+			</router-link>
+		</div>
+
+		<div class="location" v-if="dataHouse(data.house)">
+			<router-link :to="'/h/' + data.house">
+				{{ dataHouse(data.house).address }}
+			</router-link>
+		</div>
+
+		-->
+
+		<div class="permalink" v-if="hash">
+			<a :href="'/co/' + hash">nasjirak.cz/co/{{ hash }}</a>
+		</div>
+	</div>
+</div>
+

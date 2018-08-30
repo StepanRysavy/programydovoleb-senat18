@@ -1,0 +1,10 @@
+<div class="update">
+	<h3 v-if="data.name">{{ data.name[$store.state.language] }}</h3>
+	<div class="update-content" v-if="data.content">{{ data.content[$store.state.language] }}</div>
+	<div class="update-source">
+		{{ date(new Date(data.date)) }}
+		&middot;
+		{{ B('update.source') }}: <a :href="data.source.src">{{ data.source.type }}</a>
+	</div>
+</div>
+

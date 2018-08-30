@@ -1,0 +1,70 @@
+.content {
+    position: absolute;
+    right: 1rem;
+}
+
+.level-5 .content {
+    bottom: -1.5rem;
+    right: 1rem;
+}
+
+.app-feedback .content {
+    bottom: 1rem;
+}
+
+a {
+    color: #fff;
+    text-decoration: underline; 
+}
+
+h2 {
+	text-align: right;
+	font-size: 11px;
+	margin: 0;
+    white-space: nowrap;
+}
+
+h3 {
+    margin: 0 0 1rem;
+}
+
+hr {
+    height: 1px;
+    border: none;
+    background: rgba(#fff, .1);
+    margin: 2rem 0;
+}
+
+.feedback-form .cover {
+    position: fixed;
+    z-index: 10;
+    background: #fff;
+    opacity: .75;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 200vh;
+}
+
+.feedback-form .float {
+    z-index: 11;
+	position: fixed;
+    background: #3c2e8d;
+    color: #fff;
+    border-radius: 4px;
+    width: 80vw;
+    max-width: 40rem;
+    padding: 3rem;
+    box-shadow: 0 7px 20px rgba(#3c2e8d, .25);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.note {
+    font-size: 11px;
+}
+
+.footer {
+    text-align: right;
+}

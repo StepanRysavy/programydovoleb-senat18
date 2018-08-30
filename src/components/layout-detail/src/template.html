@@ -1,0 +1,69 @@
+<div class="layout-detail" v-if="$store.state.enum.length > 0">
+	<div class="add" v-if="form">
+		<div class="add-form">
+			<div class="add-headline">
+				<h1>Navrhnout úpravu</h1>
+				<div class="add-close button" @click="closeForm">&times;</div>
+			</div>
+			<div class="add-input">
+				<label>Kandidát</label> 
+				{{ selected }}
+			</div>
+			<div class="add-input">
+				<label>Obvod</label> 
+				{{ name }}</small> 
+			</div>
+			<div class="add-input add-link add-link-www">
+				<label>Program</label> 
+				<input type="url" v-model="www" placeholder="http://odkaz.na/program">
+				<button :disabled="disabled(www)" @click="sendForm('www')">Odeslat program</button>
+				<p>Děkujeme za zaslání. Odkaz zkontrolujeme a přidáme.</p>
+			</div>
+			<div class="add-input add-link add-link-fb">
+				<label>Facebook</label> 
+				<input type="url" v-model="fb" placeholder="http://odkaz.na/program">
+				<button :disabled="disabled(fb)" @click="sendForm('fb')">Odeslat odkaz</button>
+				<p>Děkujeme za zaslání. Odkaz zkontrolujeme a přidáme.</p>
+			</div>
+			<div class="add-input add-link add-link-tw">
+				<label>Twitter</label> 
+				<input type="url" v-model="tw" placeholder="http://odkaz.na/program">
+				<button :disabled="disabled(tw)" @click="sendForm('tw')">Odeslat odkaz</button>
+				<p>Děkujeme za zaslání. Odkaz zkontrolujeme a přidáme.</p>
+			</div>
+		</div>
+		<div class="add-note">
+			<p>Všechny zaslané odkazy prověřujeme, nezobrazují se proto ihned.</p>
+		</div>
+	</div>
+	<div class="list" v-if="!form">
+		<h1>{{ name }}</h1>
+		<table cellpadding="0" cellspacing="0">
+			<tr v-for="(program, index) in $store.state.programs">
+				<td>{{ program.CISLO }}</td>
+				<td>
+					<h3><router-link :to="'/kandidat/' + program.ID">{{ program.CELEJMENO }}</router-link></h3>
+					<blockquote v-if="program.HESLO.length > 0">— {{ program.HESLO }}</blockquote>
+					<p>
+						{{ program.STRANAJMENO }}
+						<br>
+						{{ program.POVOLANI }}
+						<br>
+						{{program.VEK}} let
+					</p>
+				</td>
+				<td>
+					<a v-if="program.WWW.length > 0" :href="program.WWW" target="_blank" @click="outbound('www', program)">Program</a> 
+					<span>&middot;</span>
+					<a v-if="program.FB.length > 0" :href="program.FB" target="_blank" @click="outbound('fb', program)">Facebook</a> 
+					<span>&middot;</span>
+					<a v-if="program.TW.length > 0" :href="program.TW" target="_blank" @click="outbound('tw', program)">Twitter</a>
+				</td>
+				<td >
+					<router-link :to="'/kandidat/' + program.ID" tag="button">Upravit</router-link>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+

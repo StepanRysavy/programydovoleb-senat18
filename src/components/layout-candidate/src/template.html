@@ -1,0 +1,66 @@
+<div class="layout-detail" v-if="$store.state.enum.length > 0 && $store.state.programs.length > 0">
+	<div class="add" v-if="form">
+		<div class="add-form">
+			<div class="add-headline">
+				<h1>Navrhnout úpravu</h1>
+				<div class="add-close button" @click="closeForm">&times;</div>
+			</div>
+			<div class="add-input">
+				<label>Kandidát</label> 
+				{{ selected }}
+			</div>
+			<div class="add-input">
+				<label>Obvod</label> 
+				{{ region.OBVOD_NAZEV }}</small> 
+			</div>
+			<div class="add-input add-link add-link-heslo">
+				<label>Heslo kampaně</label> 
+				<input type="text" v-model="heslo" placeholder="Heslo kampaně">
+				<button :disabled="heslo.length === 0" @click="sendForm('heslo')">Odeslat heslo</button>
+				<p>Děkujeme za zaslání. Heslo ověříme a přidáme.</p>
+			</div>
+			<div class="add-input add-link add-link-www">
+				<label>Program</label> 
+				<input type="url" v-model="www" placeholder="http://odkaz.na/program">
+				<button :disabled="disabled(www)" @click="sendForm('www')">Odeslat program</button>
+				<p>Děkujeme za zaslání. Odkaz zkontrolujeme a přidáme.</p>
+			</div>
+			<div class="add-input add-link add-link-fb">
+				<label>Facebook</label> 
+				<input type="url" v-model="fb" placeholder="http://odkaz.na/program">
+				<button :disabled="disabled(fb)" @click="sendForm('fb')">Odeslat odkaz</button>
+				<p>Děkujeme za zaslání. Odkaz zkontrolujeme a přidáme.</p>
+			</div>
+			<div class="add-input add-link add-link-tw">
+				<label>Twitter</label> 
+				<input type="url" v-model="tw" placeholder="http://odkaz.na/program">
+				<button :disabled="disabled(tw)" @click="sendForm('tw')">Odeslat odkaz</button>
+				<p>Děkujeme za zaslání. Odkaz zkontrolujeme a přidáme.</p>
+			</div>
+		</div>
+		<div class="add-note">
+			<p>Všechny zaslané odkazy prověřujeme, nezobrazují se proto ihned.</p>
+		</div>
+	</div>
+	<div class="list" v-if="!form">
+		<h1>{{ program.CELEJMENO }}</h1>
+		<blockquote v-if="program.HESLO.length > 0">— {{ program.HESLO }}</blockquote>
+		<p v-if="program.STRANAJMENO.length > 0">{{ program.STRANAJMENO }}</p>
+		<p>Kandiduje s číslem {{ program.CISLO }}</p>
+		<p>Obvod {{ region.ID }}: <strong><router-link :to="'/obvod/' + region.ID">{{ region.OBVOD_NAZEV }}</router-link></strong></p>
+		<p>Povolání: {{ program.POVOLANI }}</p>
+		<p>{{program.VEK}} let</p>
+		<h2 v-if="program.WWW.length > 0 || program.FB.length > 0 || program.TW.length > 0">Odkazy</h2>
+		<p v-if="program.WWW.length > 0"><a :href="program.WWW" target="_blank" @click="outbound('www', program)">Program</a> </p>
+		<p v-if="program.FB.length > 0"><a :href="program.FB" target="_blank" @click="outbound('fb', program)">Facebook</a> </p>
+		<p v-if="program.TW.length > 0"><a :href="program.TW" target="_blank" @click="outbound('tw', program)">Twitter</a></p>
+		<h2>Chcete něco doplnit či upravit?</h2>
+		<button @click="openForm(program)">Upravit</button>
+	</div>
+	<div class="cross">
+		<h1>
+			<router-link :to="'/obvod/' + region.ID">Všichni kandidáti v obvodu {{ region.OBVOD_NAZEV}}</router-link>
+		</h1>
+	</div>
+</div>
+

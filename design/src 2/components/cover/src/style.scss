@@ -1,0 +1,31 @@
+.cover-holder {
+  position: fixed;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80vh;
+  opacity: 1;
+
+  overflow: hidden;
+
+  transition: opacity 1s .5s ease-out, height 1s ease-out;
+
+  &.loading {
+  	opacity: 0;
+  	height: 70vh;
+
+  	transition: opacity 1s ease-in, height 1s .5s ease-in;
+  }
+}
+
+.cover {
+  background: #fafafa center center no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 80vh;
+  max-width: 120rem;
+  margin: auto;
+
+  transition: background-image 2s ease-in-out;
+}

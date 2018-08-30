@@ -1,0 +1,8 @@
+<div class="image" :class="'level-' + level">
+	<img class="image-as-element" v-if="!background" :src="src" :width="width" :height="height">
+
+	<div class="image-on-background" v-if="background" :style="{backgroundImage: 'url(' + src + ')'}" :class="'level-' + level">
+		
+	</div>
+</div>
+
