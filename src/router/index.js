@@ -1,10 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import LayoutSearch from '@/components/layout-search/do';
-import LayoutDetail from '@/components/layout-detail/do';
-import LayoutCandidates from '@/components/layout-candidates/do';
-import LayoutRegions from '@/components/layout-regions/do';
-import LayoutCandidate from '@/components/layout-candidate/do';
+import LayoutHomepage from '@/layout/homepage/do';
+import LayoutDetail from '@/layout/detail/do';
+import LayoutCandidates from '@/layout/candidates/do';
+import LayoutRegions from '@/layout/regions/do';
+import LayoutCandidate from '@/layout/candidate/do';
+import LayoutEdit from '@/layout/edit/do';
+import LayoutStaticImpressum from '@/layout/static/impressum/do';
+import LayoutImage from '@/layout/image/do';
+import LayoutImages from '@/layout/images/do';
 import store from '@/store/store';
 
 Vue.use(Router);
@@ -15,7 +19,12 @@ const router = new Router({
     {
       path: '/',
       name: 'Homepage',
-      component: LayoutSearch
+      component: LayoutHomepage
+    },
+    {
+      path: '/impressum',
+      name: 'Impressum',
+      component: LayoutStaticImpressum
     },
     {
       path: '/kandidati',
@@ -23,9 +32,26 @@ const router = new Router({
       component: LayoutCandidates
     },
     {
-      path: '/kandidat/:id',
+      path: '/kandidat/:hash',
       name: 'Detail of Candidate',
       component: LayoutCandidate,
+      props: true,
+    },
+    {
+      path: '/kandidat/:hash/form',
+      name: 'Edit Candidate',
+      component: LayoutEdit,
+      props: true,
+    },
+    {
+      path: '/infografika',
+      name: 'List of images',
+      component: LayoutImages
+    },
+    {
+      path: '/infografika/:hash',
+      name: 'Detail of image',
+      component: LayoutImage,
       props: true,
     },
     {
@@ -34,7 +60,7 @@ const router = new Router({
       component: LayoutRegions
     },
     {
-      path: '/obvod/:id',
+      path: '/obvod/:hash',
       name: 'Detail',
       component: LayoutDetail,
       props: true,

@@ -4,7 +4,7 @@ import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
 import store from './store/store';
 import router from './router';
-import App from './components/app/app';
+import App from './layout/app/app';
 import './assets/my-style.scss';
 
 import 'vue-awesome/icons';

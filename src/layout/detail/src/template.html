@@ -1,0 +1,57 @@
+<div class="layout-detail" v-if="$store.state.enum.length > 0">
+	<h1>{{ name }}</h1>
+	<p><label><input type="checkbox" v-model="details"> Zobrazit detaily</label></p>
+	<table cellpadding="0" cellspacing="0">
+		<tr v-for="(program, index) in $store.state.programs">
+			<td>{{ program.CISLO }}</td>
+			<td>
+				<h3 :class="{rerun: program.OBHAJUJE === 1}">
+					<router-link :to="'/kandidat/' + program.HASH">
+						{{ program.CELEJMENO }}
+					</router-link>
+					<span class="dimm" v-if="details === false">
+						&middot;
+						{{program.VEK}} let
+					</span>
+				</h3>
+				<blockquote v-if="program.HESLO.length > 0 && details === true">— {{ program.HESLO }}</blockquote>
+				<p>
+					{{ program.STRANAJMENO }}
+					<template v-if="details === true">
+						<br>
+						{{ program.POVOLANI }}
+						<strong v-if="program.OBHAJUJE === 1">
+							<br>
+							obhajuje mandát
+						</strong>
+						<br>
+						{{program.VEK}} let
+					</template>
+				</p>
+			</td>
+			<td>
+				<div class="social">
+					<div class="icon" v-if="program.WWW.length > 0">
+						<a :href="program.WWW" target="_blank" @click="outbound('www', program)" title="program online">
+							<img src="/static/icon/www.svg" alt="program online">
+						</a>
+					</div>
+					<div class="icon" v-if="program.FB.length > 0">
+						<a :href="program.FB" target="_blank" @click="outbound('fb', program)" title="profil na Facebooku">
+							<img src="/static/icon/fb.svg" alt="profil na Facebooku">
+						</a>
+					</div>
+					<div class="icon" v-if="program.TW.length > 0">
+						<a :href="program.TW" target="_blank" @click="outbound('tw', program)" title="účet na Twitteru">
+							<img src="/static/icon/tw.svg" alt="účet na Twitteru">
+						</a>
+					</div>
+				</div>
+			</td>
+			<td >
+				<router-link :to="'/kandidat/' + program.HASH" tag="button">Podrobnosti</router-link>
+			</td>
+		</tr>
+	</table>
+</div>
+

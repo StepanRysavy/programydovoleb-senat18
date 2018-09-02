@@ -45,6 +45,7 @@ button, .button {
 	box-shadow: 0 1px 1px rgba(0,0,0,.25);
 	border-radius: 4px;
 	background: #fff;
+	padding: .5em 1em;
 
 	&:hover {
 		cursor: pointer;
@@ -52,6 +53,22 @@ button, .button {
 		box-shadow: 0 1px 1px rgba(0,0,0,.33);
 	}
 
+}
+
+h1 {
+	margin: 0;
+	line-height: 1.1;
+	padding: 0 0 .25em;
+}
+
+p {
+	margin: 0;
+}
+
+ul, li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 h1 a {
@@ -65,4 +82,9 @@ h1 a {
 
 .cross {
 	margin-top: 3rem;
+}
+
+.dimm {
+	color: #ccc;
+	font-weight: normal;
 }

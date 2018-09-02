@@ -1,0 +1,68 @@
+.layout-candidate {
+	max-width: 40rem;
+	margin: auto;	
+}
+
+h1 {
+	margin: 0;
+	padding: 0;
+}
+
+.rerun .highlight {
+	color: #D7141A;
+}
+
+blockquote {
+	font-family: serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    padding: .1em 0 0 .5em;
+    margin: 0;
+}
+
+.about {
+	line-height: 1.5;
+}
+
+.button {
+	margin-top: 1rem;
+}
+
+.social {
+	margin: 1.5rem 0 1.5rem;
+
+	a {
+		border: none;
+	}
+
+	span {
+		font-size: 10px;
+		text-transform: uppercase;
+		color: #aaa;
+		display: block;
+		font-weight: bold;
+		margin: .5rem auto 0;
+
+		transition: color .25s;
+		text-align: center;
+	}
+
+	a:hover span {
+		color: #444;
+	}
+}
+
+.icon {
+	display: inline-block;
+	margin-right: .5em;
+	width: 4rem;
+
+	img {
+		display: block;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		overflow: hidden;
+		margin: auto;
+	}
+}

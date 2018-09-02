@@ -1,0 +1,38 @@
+<div class="layout-detail" v-if="$store.state.enum.length > 0">
+	<h1>V kterých obvodech se letos volí?</h1>
+	<ul>
+		<li v-for="(result, index) in list">
+			<div class="result">
+				<h3>
+					<router-link :to="'/obvod/' + result.HASH" v-html="result.OBVOD_NAZEV"></router-link> 
+					<span class="dimm">
+						&middot;
+						{{ result.OBVOD }}
+					</span>
+				</h3>
+			</div>
+		</li>
+	</ul>
+	<h1>Kteří senátoři obhajují?</h1>
+	<ul class="alphabet">
+		<li v-for="(result, index) in $store.state.listOfCandidates.filter(item => item.OBHAJUJE === 1)">
+			<div class="result">
+				<h4>
+					<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO"></router-link>
+				</h4>	
+			</div>
+		</li>
+		<li>
+			<div class="result">
+				<h4 class="rerun">
+					<router-link to="/kandidati">Seznam všech kandidátů</router-link>
+				</h4>
+			</div>
+		</li>
+	</ul>
+	<template v-if="$store.state.images.loaded === true">
+		<h1>Poslední grafy a visuály</h1>
+		<list-of-images :list="latestImages" :columns="3"></list-of-images>
+	</template>
+</div>
+
