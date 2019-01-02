@@ -1,11 +1,105 @@
 <div class="layout-detail" v-if="$store.state.enum.length > 0">
-	<h1>{{ name }}</h1>
-	<p><label><input type="checkbox" v-model="details"> Zobrazit detaily</label></p>
+	<h1>{{ name }} <small>/ obvod {{ region.OBVOD }}</small></h1>
+	<template v-if="$store.state.votingDisplay === true">
+		<template v-if="region.counted1 < 100">
+			Prozatím sečteno {{ region.counted1 }} % okrsků.
+		</template>
+		<template v-if="region.counted1 === 100 && region.counted2 === 0">
+			<p>Všechny okrsky již byly sečteny.</p>
+			<p v-if="highlighted.length === 1">Senátorem se stává již po prvním kole {{ highlighted[0].CELEJMENO }} se ziskem {{ highlighted[0].ZISK1_PCT }} % hlasů.</p>
+			<p v-if="highlighted.length === 2">Do druhého kola postupují: {{ highlighted[0].CELEJMENO }} a {{ highlighted[1].CELEJMENO }}.</p>
+		</template>
+		<template v-if="region.counted2 < 100 && region.counted2 > 0">
+			Prozatím sečteno {{ region.counted2 }} % okrsků.
+		</template>
+		<template v-if="region.counted2 === 100">
+			<p>Všechny okrsky již byly sečteny.</p>
+			<p>Senátorem se stává {{ highlighted2[0].CELEJMENO }} se ziskem {{ highlighted2[0].ZISK2_PCT }} % hlasů.</p>
+		</template>
+	</template>
+	<template v-if="$store.state.votingDisplay === true && region.counted1 === 100 && highlighted.length === 2">
+		<h2>Druhé kolo, 12. a 13. října</h2>
+		<table cellpadding="0" cellspacing="0">
+			<tr v-for="(program, index) in highlighted2" :class="{red: index === 0 && region.counted2 > 0}">
+				<td class="number">{{ program.CISLO }}</td>
+				<td>
+					<h3 :class="{rerun2: program.OBHAJUJE === 1}" class="voting-holder">
+						<router-link :to="'/kandidat/' + program.HASH">
+							{{ program.CELEJMENO }}
+						</router-link>
+						<span class="dimm" v-if="details === false">
+							&middot;
+							{{program.VEK}} let
+						</span>
+						<span class="voting-results-graph" :style="{width: program.ZISK2_PCT + '%' }"></span>
+					</h3>
+					<p>
+						{{ program.STRANAJMENO }}
+						<template v-if="$store.state.votingDisplay === false || showResults === true && (votes(program).count > -1 || tips(program).count > -1)">
+							<br>
+							<small class="desktop-only">
+								{{ votes(program).percentage }} % hlasů
+								&middot;
+								tipuje na vítěze {{ tips(program).percentage }} % lidí
+							</small>
+						</template>
+					</p>
+					<div class="program-graph" v-if="showResults === true && (tips(program).count > 0 || votes(program).count > 0)">
+						<span class="program-graph-votes" :style="{width: ((votes(program).percentage > 50 ? 50 : votes(program).percentage) * .9) + '%'}" v-if="votes(program).count > 0"></span>
+						<span class="program-graph-tips" :style="{width: ((tips(program).percentage > 50 ? 50 : tips(program).percentage) * .9) + '%'}" v-if="tips(program).count > 0"></span>
+					</div>
+					<blockquote v-if="$store.state.votingDisplay === false && program.HESLO.length > 0">{{ program.HESLO }}</blockquote>
+				</td>
+				<td class="actions">
+					<div class="social">
+						<template v-if="region.counted2 === 0">
+							<div class="icon" v-if="program.WWW.length > 0">
+								<a :href="program.WWW" target="_blank" @click="outbound('www', program)" title="program online">
+									<img src="/static/icon/www.svg" alt="program online">
+									<span>Program</span>
+								</a>
+							</div>
+							<div class="icon" v-if="program.FB.length > 0">
+								<a :href="program.FB" target="_blank" @click="outbound('fb', program)" title="profil na Facebooku">
+									<img src="/static/icon/fb.svg" alt="profil na Facebooku">
+									<span>FB Profil</span>
+								</a>
+							</div>
+							<div class="icon" v-if="program.TW.length > 0">
+								<a :href="program.TW" target="_blank" @click="outbound('tw', program)" title="účet na Twitteru">
+									<img src="/static/icon/tw.svg" alt="účet na Twitteru">
+									<span>Twitter</span>
+								</a>
+							</div>
+							<div class="icon" v-if="program.AUDIO === 1">
+								<a @click="changeAudioModalTo(program)" title="poslechněte si audio vizitku kandidáta">
+									<img src="/static/icon/icon-audio.svg" alt="audio vizitka">
+									<span>vizitka</span>
+								</a>
+							</div>
+						</template>
+						<div class="voting-results" v-if="region.counted2 > 0">
+							<div class="voting-results-pct">
+								{{ program.ZISK2_PCT }} %
+							</div>
+							<div class="voting-results-votes">
+								{{ program.ZISK2 }} hlasů
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</template>
+	<h2 v-if="$store.state.votingDisplay === true">Výsledky 1. kola voleb</h2>
+	<div class="help" v-if="votedInRegion === false">
+		<img src="/static/icon/who.svg" alt="Tipněte si, kdo vyhraje" class="who" v-if="$store.state.votingEnabled === true">
+	</div>
 	<table cellpadding="0" cellspacing="0">
-		<tr v-for="(program, index) in $store.state.programs">
-			<td>{{ program.CISLO }}</td>
+		<tr v-for="(program, index) in programs" :class="{red: highlighted.filter(item => item.ID === program.ID).length > 0}">
+			<td class="number">{{ program.CISLO }}</td>
 			<td>
-				<h3 :class="{rerun: program.OBHAJUJE === 1}">
+				<h3 :class="{rerun: program.OBHAJUJE === 1}" class="voting-holder">
 					<router-link :to="'/kandidat/' + program.HASH">
 						{{ program.CELEJMENO }}
 					</router-link>
@@ -13,45 +107,94 @@
 						&middot;
 						{{program.VEK}} let
 					</span>
+					<span class="voting-results-graph" v-if="$store.state.votingDisplay === true" :style="{width: program.ZISK1_PCT + '%' }"></span>
 				</h3>
-				<blockquote v-if="program.HESLO.length > 0 && details === true">— {{ program.HESLO }}</blockquote>
 				<p>
 					{{ program.STRANAJMENO }}
-					<template v-if="details === true">
+					<template v-if="$store.state.votingDisplay === false || showResults === true && (votes(program).count > -1 || tips(program).count > -1)">
 						<br>
-						{{ program.POVOLANI }}
-						<strong v-if="program.OBHAJUJE === 1">
-							<br>
-							obhajuje mandát
-						</strong>
-						<br>
-						{{program.VEK}} let
+						<small class="desktop-only">
+							{{ votes(program).percentage }} % hlasů
+							&middot;
+							tipuje na vítěze {{ tips(program).percentage }} % lidí
+						</small>
 					</template>
 				</p>
+				<div class="program-graph" v-if="showResults === true && (tips(program).count > 0 || votes(program).count > 0)">
+					<span class="program-graph-votes" :style="{width: ((votes(program).percentage > 50 ? 50 : votes(program).percentage) * .9) + '%'}" v-if="votes(program).count > 0"></span>
+					<span class="program-graph-tips" :style="{width: ((tips(program).percentage > 50 ? 50 : tips(program).percentage) * .9) + '%'}" v-if="tips(program).count > 0"></span>
+				</div>
+				<blockquote v-if="$store.state.votingDisplay === false && program.HESLO.length > 0">{{ program.HESLO }}</blockquote>
 			</td>
-			<td>
+			<td class="actions">
 				<div class="social">
-					<div class="icon" v-if="program.WWW.length > 0">
-						<a :href="program.WWW" target="_blank" @click="outbound('www', program)" title="program online">
-							<img src="/static/icon/www.svg" alt="program online">
-						</a>
-					</div>
-					<div class="icon" v-if="program.FB.length > 0">
-						<a :href="program.FB" target="_blank" @click="outbound('fb', program)" title="profil na Facebooku">
-							<img src="/static/icon/fb.svg" alt="profil na Facebooku">
-						</a>
-					</div>
-					<div class="icon" v-if="program.TW.length > 0">
-						<a :href="program.TW" target="_blank" @click="outbound('tw', program)" title="účet na Twitteru">
-							<img src="/static/icon/tw.svg" alt="účet na Twitteru">
-						</a>
+					<template v-if="$store.state.votingDisplay === false">
+						<div class="icon" v-if="program.WWW.length > 0">
+							<a :href="program.WWW" target="_blank" @click="outbound('www', program)" title="program online">
+								<img src="/static/icon/www.svg" alt="program online">
+								<span>Program</span>
+							</a>
+						</div>
+						<div class="icon" v-if="program.FB.length > 0">
+							<a :href="program.FB" target="_blank" @click="outbound('fb', program)" title="profil na Facebooku">
+								<img src="/static/icon/fb.svg" alt="profil na Facebooku">
+								<span>FB Profil</span>
+							</a>
+						</div>
+						<div class="icon" v-if="program.TW.length > 0">
+							<a :href="program.TW" target="_blank" @click="outbound('tw', program)" title="účet na Twitteru">
+								<img src="/static/icon/tw.svg" alt="účet na Twitteru">
+								<span>Twitter</span>
+							</a>
+						</div>
+						<div class="icon" v-if="program.AUDIO === 1">
+							<a @click="changeAudioModalTo(program)" title="poslechněte si audio vizitku kandidáta">
+								<img src="/static/icon/icon-audio.svg" alt="audio vizitka">
+								<span>vizitka</span>
+							</a>
+						</div>
+						<div class="actions-vote" v-if="$store.state.votingEnabled === true">
+							<em class="middot">&middot;</em>
+							<vote-icon class="action-vote" :type="'tip'" :region="region.ID" :candidate="program.ID" :verbose="false" :link="'kandidat/' + program.HASH"></vote-icon>
+							<vote-icon class="action-vote" :type="'vote'" :region="region.ID" :candidate="program.ID" :verbose="false" :link="'kandidat/' + program.HASH"></vote-icon>
+						</div>
+					</template>
+					<div class="voting-results" v-if="$store.state.votingDisplay === true">
+						<div class="voting-results-pct">
+							{{ program.ZISK1_PCT }} %
+						</div>
+						<div class="voting-results-votes">
+							{{ program.ZISK1 }} hlasů
+						</div>
 					</div>
 				</div>
 			</td>
-			<td >
-				<router-link :to="'/kandidat/' + program.HASH" tag="button">Podrobnosti</router-link>
-			</td>
 		</tr>
 	</table>
+	<audio-modal :program="selectedProgram" :region="region" :changeTo="changeAudioModalTo" v-if="selectedProgram != null"></audio-modal>
+	<template v-if="$store.state.selectedRegion.votes.length > 0">
+		<h2>Tipování a hlasování</h2>
+		<p>
+			V internetovém hlasování odevzdalo hlas {{ $store.state.selectedRegion.countVotes }} lidí. Vítěze tipovalo {{ $store.state.selectedRegion.countTips }} lidí. Uvědomujeme si, že to je málo, aby to mělo nějakou reálnou vypovídací hodnotu, proto prosím podle toho přistupujte k výsledkům.
+		</p>
+		<p v-if="showResults === false"><br><button class="button-secondary" @click="click_showResults">Zobrazit výsledky hlasování</button></p>
+		<br>
+	</template>
+	<template v-if="$store.state.votingEnabled === true">
+		<p>V každém obvodu si můžete <b>tipnout</b>, kdo se dostane do Senátu.</p>
+		<p>Můžete i <b>hlasovat</b> nanečisto. Hlas ale můžete dát jen jednomu kandidátovi.</p>
+		<p><span v-if="region.voteCount && region.voteCount > 49">Již hlasovalo {{ region.voteCount }} lidí. </span></p>
+		<br>
+		<p><a :href="'http://www.facebook.com/sharer/sharer.php?u=' + encodeURI(link)" class="button" target="_blank" @click="sharebound">Pozvat přátele z Facebooku, ať také hlasují</a></p>
+	</template>
+	<h2>Do obvodu {{ name }} patří:</h2>
+	<template v-if="region.description">
+		<p>Orientačně: {{ region.description }}.</p>
+		<br>
+		<p><a :href="'https://www.senat.cz/senat/volby/hledani/o_obvodu.php?kod=' + region.OBVOD" target="_blank" class="button button-secondary">Kompletní seznam obcí</a></p>	
+	</template>
+	<h1>
+		<router-link to="/obvody">V kterých dalších obvodech se letos volí?</router-link>
+	</h1>
 </div>
 

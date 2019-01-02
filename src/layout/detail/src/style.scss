@@ -1,12 +1,28 @@
+h1 small {
+	font-weight: normal;
+}
+
+h1 + p {
+	max-width: 40rem;
+}
+
+h2 {
+	margin-top: 3rem;
+}
+
 table {
 	width: 100%;
-	margin-top: 2rem;
+	margin: 2rem 0;
+}
+
+tr {
+	position: relative;
 }
 
 td, th {
 	padding: .5rem 0;
 	border-bottom: 1px solid transparent;
-	vertical-align: baseline;
+	vertical-align: top;
 	min-width: 2rem;
 	text-align: left;
 	font-weight: normal;
@@ -14,13 +30,33 @@ td, th {
 	&:last-child {
 		min-width: 4rem;
 	}
+
+	tr:hover & {
+		background: #fafafa;
+		border-bottom: 1px solid #eee;
+	}
 }
 
 .result {
 	display: none;
 }
 
-@media (max-width: 45rem) {
+.number,
+h3 {
+	font-size: 1.15rem;
+}
+
+.number {
+	color: #888;
+	padding-left: .5em;	
+	width: 3rem;
+
+	@media (max-width: 45rem) {
+		display: none;
+	}
+}
+
+@media (max-width: 40rem) {
 	td, tr, th {
 		display: block;
 	}
@@ -29,11 +65,15 @@ td, th {
 		display: none;
 	}
 
-	td, th {
+	tr:hover {
+		td, th {
+			background: none;
+			border-color: transparent;
+		}
 	}
 
 	tr {
-		margin-bottom: 2rem;
+		margin-bottom: 1rem;
 	}
 
 	th {
@@ -74,8 +114,30 @@ blockquote {
 	font-family: serif;
     font-style: italic;
     font-size: 1.25rem;
-    padding: .25em 0 0 .5em;
-    margin: 0;
+    padding: .5em 1em;
+    margin: 1em 0 0;
+    position: relative;
+    border: 1px solid #ccc;
+    background: #fff;
+    display: inline-block;
+    max-width: 30rem;
+
+    &:before {
+    	content: "";
+    	position: absolute;
+    	width: 1rem;
+    	height: 1rem;
+    	border-left: 1px solid #ccc;
+    	border-top: 1px solid #ccc;
+    	background: #fff;
+    	transform: rotate(45deg) translateY(10px);
+    	bottom: 100%;
+    	left: 1.66rem;
+    }
+
+    @media (min-width: 45rem) {
+    	margin-bottom: 1rem;
+    }
 }
 
 
@@ -97,6 +159,13 @@ blockquote + p {
 	display: inline-block;
 }
 
+.middot {
+	position: relative;
+	top: -2em;
+	left: -.25em;
+	color: #aaa;
+}
+
 .rerun a {
 	color: #D7141A;
 
@@ -106,25 +175,201 @@ blockquote + p {
 }
 
 .social {
-	margin: 0 0 1.5rem;
+
+	@media (min-width: 45rem) {
+		text-align: right;
+		margin: 0;
+	}
+
+	span {
+		font-size: 9px;
+		text-transform: uppercase;
+		color: #aaa;
+		display: block;
+		font-weight: bold;
+		margin: .5rem auto 0;
+
+		transition: color .25s, opacity .25s;
+		text-align: center;
+	}
+
+	a:hover span {
+		color: #444;
+	}
 
 }
 
 .icon {
 	display: inline-block;
-	margin-right: .5em;
+	margin-right: .25em;
 
 	img {
 		display: block;
-		width: 2rem;
-		height: 2rem;
+		width: 2.5rem;
+		height: 2.5rem;
 		border-radius: 50%;
 		overflow: hidden;
 		margin: auto;
 	}
 
 	@media (min-width: 45rem) {
-		position: relative;
-		top: 1rem;
+		// position: relative;
+		// top: 1rem;
 	}
+}
+
+.vote {
+
+	@media (min-width: 45rem) {
+		// position: relative;
+		// top: 1rem;
+	}
+}
+
+p + h1 {
+	margin-top: 3rem;
+}
+
+@media (min-width: 40rem) {
+	.layout-detail {
+		.social span {
+			opacity: 0;
+		}
+
+		tr:hover .social span {
+			opacity: 1;
+		}
+	}
+}
+
+.actions {
+
+	max-width: 24rem;
+	white-space: nowrap;
+
+	@media (max-width: 45rem) {
+
+		position: relative;
+		margin-top: -1rem;
+
+		.icon, .actions-vote {
+			display: none;
+		}
+	}
+}
+
+.actions-vote {
+	display: inline-block;
+	
+	@media (max-width: 55rem) {
+		display: none;
+	}
+}
+
+@keyframes bounce {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+.help {
+	position: relative;
+	height: 0;
+	display: none;
+
+	
+	@media (min-width: 55rem) {
+		display: block;
+	}
+
+	img {
+		width: 140px;
+	    height: 70px;
+	    position: absolute;
+	    bottom: -1rem;
+	    right: .75rem;
+
+	    animation: bounce 2s infinite;
+	}
+}
+
+.action-vote:not(:last-child) {
+	margin-right: .25rem;
+}
+
+.program-graph {
+	margin: .1rem 0 .25rem;
+	line-height: 4px;
+	font-size: 4px;
+}
+
+.program-graph-tips {
+	height: 2px;
+	display: inline-block;
+	background: #D7141A;
+}
+
+.program-graph-votes {
+	height: 2px;
+	background: #11457e;
+	display: inline-block;
+}
+
+small {
+	font-size: .8rem;
+}
+
+.voting-results {
+	display: inline-block;
+
+	.voting-results-pct,
+	.voting-results-votes {
+		font-size: .8rem;
+		display: inline;
+		margin-right: .5rem;
+	}
+
+
+
+	@media (min-width: 40rem) {
+		transform: translateY(-.45rem);
+		padding-right: .5em;
+
+		.voting-results-pct {
+			display: block;
+			font-size: 1.5rem;
+			font-weight: bold;
+			min-width: 6rem;
+		}
+
+		.voting-results-votes {
+			color: #aaa;
+			font-size: .8rem;
+		}
+	}
+}
+
+.voting-results-graph {
+	position: absolute;
+	top: 0;
+	height: 1.6rem;
+	left: 0;
+	background: rgba(#aaa, .1);
+	border-bottom: 1px solid #aaa;
+	pointer-events: none;
+
+	.red & {
+		// background: rgba(#11457e, .1);
+		border-bottom: 1px solid #D7141A;
+	}
+}
+
+.voting-holder {
+	position: relative;
 }

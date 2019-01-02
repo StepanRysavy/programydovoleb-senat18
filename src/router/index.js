@@ -7,8 +7,11 @@ import LayoutRegions from '@/layout/regions/do';
 import LayoutCandidate from '@/layout/candidate/do';
 import LayoutEdit from '@/layout/edit/do';
 import LayoutStaticImpressum from '@/layout/static/impressum/do';
+import LayoutStaticVoting from '@/layout/static/voting/do';
+import LayoutStaticCookies from '@/layout/static/cookies/do';
 import LayoutImage from '@/layout/image/do';
 import LayoutImages from '@/layout/images/do';
+import LayoutHash from '@/layout/hash/do';
 import store from '@/store/store';
 
 Vue.use(Router);
@@ -27,9 +30,25 @@ const router = new Router({
       component: LayoutStaticImpressum
     },
     {
+      path: '/hlasovani',
+      name: 'Hlasování',
+      component: LayoutStaticVoting
+    },
+    {
+      path: '/cookies',
+      name: 'Cookies',
+      component: LayoutStaticCookies
+    },
+    {
       path: '/kandidati',
       name: 'List of Candidates',
       component: LayoutCandidates
+    },
+    {
+      path: '/kandidati/:by',
+      name: 'List of Candidates by Party',
+      component: LayoutCandidates,
+      props: true
     },
     {
       path: '/kandidat/:hash',
@@ -52,6 +71,12 @@ const router = new Router({
       path: '/infografika/:hash',
       name: 'Detail of image',
       component: LayoutImage,
+      props: true,
+    },
+    {
+      path: '/hlasovani/:hash',
+      name: 'Hlasovací lístek',
+      component: LayoutHash,
       props: true,
     },
     {

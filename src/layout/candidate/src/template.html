@@ -1,7 +1,16 @@
 <div class="layout-candidate" v-if="$store.state.enum.length > 0 && $store.state.programs.length > 0 && program">
 	<div class="list">
 		<h1>{{ program.CELEJMENO }}</h1>
-		<blockquote v-if="program.HESLO.length > 0">— {{ program.HESLO }}</blockquote>
+		<p v-if="program.STRANAJMENO.length > 0">{{ program.STRANAJMENO }}</p>
+		<p>{{ program.POVOLANI }}, {{program.VEK}} let</p>
+		<p>
+			kandiduje s číslem {{ program.CISLO }}
+			
+		</p>
+		<p v-if="program.OBHAJUJE === 1">
+			<strong class="highlight">Obhajuje svůj mandát</strong>
+		</p>
+		<blockquote v-if="program.HESLO.length > 0">{{ program.HESLO }}</blockquote>
 	</div>
 	<div class="social">
 		<div class="icon" v-if="program.WWW.length > 0">
@@ -13,7 +22,7 @@
 		<div class="icon" v-if="program.FB.length > 0">
 			<a :href="program.FB" target="_blank" @click="outbound('fb', program)" title="profil na Facebooku">
 				<img src="/static/icon/fb.svg" alt="profil na Facebooku">
-				<span>fb stránka</span>
+				<span>FB profil</span>
 			</a>
 		</div>
 		<div class="icon" v-if="program.TW.length > 0">
@@ -23,20 +32,23 @@
 			</a>
 		</div>
 	</div>
-	<div class="about" :class="{rerun: program.OBHAJUJE === 1}">
-		<p v-if="program.OBHAJUJE === 1"><strong class="highlight">Obhajuje svůj mandát</strong></p>
-		<p>Obvod {{ region.ID }}: <strong><router-link :to="'/obvod/' + region.HASH">{{ region.OBVOD_NAZEV }}</router-link></strong></p>
-		<p v-if="program.STRANAJMENO.length > 0">{{ program.STRANAJMENO }}</p>
-		<p>{{ program.POVOLANI }}</p>
-		<p>Kandiduje s číslem {{ program.CISLO }}</p>
-		<p>{{program.VEK}} let</p>
-		<p v-if="program.WWW.length > 0">
-			<a :href="program.WWW" target="_blank" @click="outbound('www', program)" title="program online">
-				program online
-			</a>
-		</p>
+	<div v-if="program.AUDIO === 1">
+		<div class="audio">
+			<iframe :src="audioFrame(program)" width="100%" height="290" noresize="resize" scrolling="no" frameborder="no"></iframe>
+		</div>
+		<p><small>Audio vizitka ze stránek <a href="https://www.irozhlas.cz/volby/senatni-volby-2018/kandidati-vizitky/embed-vizitky-senatoru" target="_blank">Českého rozhlasu</a>. Načtení může pár vteřin trvat.</small></p>
 	</div>
-	<router-link :to="'/kandidat/' + program.HASH + '/form'" class="button">Upravit údaje</router-link>
+	<router-link :to="'/kandidat/' + program.HASH + '/form'" class="button button-secondary">Upravit údaje</router-link>
+	<div class="activity" v-if="$store.state.votingEnabled === true">
+		<h2>Vyjádřete podporu:</h2>
+		<vote-icon class="action-vote" :type="'tip'" :region="region.ID" :candidate="program.ID" :verbose="true" :link="'kandidat/' + program.HASH"></vote-icon>
+		<vote-icon class="action-vote" :type="'vote'" :region="region.ID" :candidate="program.ID" :verbose="true" :link="'kandidat/' + program.HASH"></vote-icon>
+		<div v-html="voted" class="activity-voted"></div>
+		<div v-if="$store.state.votes.hash === ''">
+			
+			<p><span class="button button-secondary" @click="load">Už jste hlasovali?</span></p>
+		</div>
+	</div>
 	<div class="cross">
 		<h1>
 			<router-link :to="'/obvod/' + region.HASH">Všichni kandidáti v obvodu {{ region.OBVOD_NAZEV}}</router-link>

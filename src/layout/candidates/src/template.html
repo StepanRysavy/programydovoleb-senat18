@@ -1,8 +1,37 @@
 <div class="layout-detail" v-if="$store.state.enum.length > 0">
 	<h1>Kdo kandiduje?</h1>
-	<p><strong>Červeně</strong> označení kandidáti obhajují svůj mandát</p>
-	<ul class="alphabet">
-		<li v-for="(result, index) in $store.state.listOfCandidates">
+	<p>
+		<strong>Červeně</strong> označení kandidáti obhajují svůj mandát. 
+	</p>
+	<!--
+	<p>Seřadit kandidáty
+		<strong>
+			<span class="is-link" v-if="sortBy!='party'" @click="sortByChange('party')">podle strany</span>
+			<span class="is-link" v-if="sortBy!='name'" @click="sortByChange('name')">podle jména</span>
+		</strong>
+	</p>-->
+	<ul class="filter" v-if="sortBy === 'party'">
+		<li>Zobrazit:</li>
+		<li>
+			<router-link to="/kandidati">
+				Vše
+			</router-link>
+		</li>
+		<li>&middot;</li>
+		<li v-for="(party, index) in listOfMajorParties">
+			<router-link :to="'/kandidati/' + party.by">
+				{{ party.short }}
+			</router-link>
+			&middot;&nbsp;
+		</li>
+		<li>
+			<router-link to="/kandidati/ostatni">
+				Ostatní kandidáti
+			</router-link>
+		</li>
+	</ul>
+	<ul class="alphabet" v-if="sortBy==='name'">
+		<li v-for="(result, index) in listByName">
 			<h3 v-if="(index === 0 || (index > 0 && $store.state.listOfCandidates[index].HASH.charAt(0) != $store.state.listOfCandidates[index - 1].HASH.charAt(0))) && $store.state.listOfCandidates[index].HASH.charAt(0) != 'Ť' && (index > 1 && $store.state.listOfCandidates[index - 1].HASH.charAt(0) != 'Ť')">
 				{{ result.HASH.charAt(0).toUpperCase() }}{{ ch(result.HASH) === true ? "h" : ""}}
 			</h3>
@@ -15,6 +44,130 @@
 				</h4>	
 			</div>
 		</li>
+	</ul>
+	<h2 v-if="sortBy==='party' && filterBy != 'all'">
+		{{ filterBy === 'others' ? 'Ostatní strany, koalice a nezávislí kandidáti' : listOfMajorParties.find(item => item.short === filterBy).name }}
+	</h2>
+	<ul class="alphabet" v-if="sortBy==='party'" :class="{all: filterBy === 'all'}">
+		<template v-for="(party, index) in listOfMajorParties">
+			<template v-if="filterBy === 'all' || filterBy === party.short">
+				<li v-if="filterBy === 'all'" class="party-name">
+					<h3>
+						{{ party.short }}
+					</h3>
+				</li>	
+				<template v-if="listOfCandidatesByParty(party.name).wins.length > 0">
+					<li>
+						<h5>Zvolení senátoři</h5>
+					</li>
+					<li v-for="(result, index) in listOfCandidatesByParty(party.name).wins">
+						<div class="result win">
+							<h4>
+								<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO" :class="{red: result.OBHAJUJE === 1}"></router-link>
+							</h4>	
+							<p v-if="filterBy != 'all'" class="region">
+								<small v-for="(region, index) in $store.state.enum.filter(item => item.OBVOD === result.OBVOD)">
+									<router-link :to="'/obvod/' + region.HASH">{{ region.OBVOD_NAZEV}}</router-link>
+								</small>
+							</p>
+						</div>
+					</li>
+				</template>
+				<template v-if="listOfCandidatesByParty(party.name).second.length > 0">
+					<li>
+						<h5>Neuspěli v druhém kole</h5>
+					</li>
+					<li v-for="(result, index) in listOfCandidatesByParty(party.name).second">
+						<div class="result" :class="{second: result.SECOND === 1, win: result.WIN === 1}">
+							<h4>
+								<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO" :class="{red: result.OBHAJUJE === 1}"></router-link>
+							</h4>	
+							<p v-if="filterBy != 'all'" class="region">
+								<small v-for="(region, index) in $store.state.enum.filter(item => item.OBVOD === result.OBVOD)">
+									<router-link :to="'/obvod/' + region.HASH">{{ region.OBVOD_NAZEV}}</router-link> &middot; {{ region.OBVOD }}
+								</small>
+							</p>
+						</div>
+					</li>
+				</template>
+				<template v-if="listOfCandidatesByParty(party.name).both.filter(item => !item.SECOND && !item.WIN).length > 0">
+					<li>
+						<h5>Vyřazení kandidáti</h5>
+					</li>
+					<li v-for="(result, index) in listOfCandidatesByParty(party.name).both.filter(item => !item.SECOND && !item.WIN)">
+						<div class="result">
+							<h4>
+								<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO" :class="{red: result.OBHAJUJE === 1}"></router-link>
+							</h4>	
+							<p v-if="filterBy != 'all'" class="region">
+								<small v-for="(region, index) in $store.state.enum.filter(item => item.OBVOD === result.OBVOD)">
+									<router-link :to="'/obvod/' + region.HASH">{{ region.OBVOD_NAZEV}}</router-link> &middot; {{ region.OBVOD }}
+								</small>
+							</p>
+						</div>
+					</li>
+				</template>
+			</template>
+		</template>
+		<li class="desktop-only" v-if="filterBy === 'all'"></li>
+		<template v-if="filterBy === 'all' || filterBy === 'others'">
+			<li v-if="filterBy === 'all'">
+				<h3>
+					Ostatní strany, koalice a nezávislí kandidáti
+				</h3>
+			</li>
+			<template v-if="listByMinorParty.reRunners.length > 0">
+				<li>
+					<h5>Noví senátoři</h5>
+				</li>
+				<li v-for="(result, index) in listByMinorParty.wins">
+					<div class="result win">
+						<h4>
+							<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO" :class="{red: result.OBHAJUJE === 1}"></router-link>
+						</h4>	
+						<p v-if="filterBy != 'all'" class="region">
+							<small v-for="(region, index) in $store.state.enum.filter(item => item.OBVOD === result.OBVOD)">
+								<router-link :to="'/obvod/' + region.HASH">{{ region.OBVOD_NAZEV}}</router-link>
+							</small>
+						</p>
+					</div>
+				</li>
+			</template>
+			<template>
+				<li>
+					<h5>Neuspěli v druhém kole</h5>
+				</li>
+				<li v-for="(result, index) in listByMinorParty.second">
+					<div class="result second">
+						<h4>
+							<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO" :class="{red: result.OBHAJUJE === 1}"></router-link>
+						</h4>	
+						<p v-if="filterBy != 'all'" class="region">
+							<small v-for="(region, index) in $store.state.enum.filter(item => item.OBVOD === result.OBVOD)">
+								<router-link :to="'/obvod/' + region.HASH">{{ region.OBVOD_NAZEV}}</router-link> &middot; {{ region.OBVOD }}
+							</small>
+						</p>
+					</div>
+				</li>
+			</template>
+			<template v-if="listByMinorParty.reRunners.length > 0">
+				<li>
+					<h5>Vyřazení kandidáti</h5>
+				</li>
+				<li v-for="(result, index) in listByMinorParty.both.filter(item => !item.SECOND && !item.WIN)">
+					<div class="result">
+						<h4>
+							<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO"></router-link :class="{red: result.OBHAJUJE === 1}">
+						</h4>	
+						<p v-if="filterBy != 'all'" class="region">
+							<small v-for="(region, index) in $store.state.enum.filter(item => item.OBVOD === result.OBVOD)">
+								<router-link :to="'/obvod/' + region.HASH">{{ region.OBVOD_NAZEV}}</router-link>
+							</small>
+						</p>
+					</div>
+				</li>
+			</template>
+		</template>
 	</ul>
 	<h1>
 		<router-link to="/obvody">V kterých obvodech se letos volí?</router-link>

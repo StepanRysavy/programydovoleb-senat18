@@ -1,11 +1,21 @@
 .layout-candidate {
 	max-width: 40rem;
 	margin: auto;	
+	text-align: center;
 }
 
 h1 {
 	margin: 0;
 	padding: 0;
+	text-align: center;
+}
+
+h1 + p {
+	margin-top: 1em;
+}
+
+h2 {
+	margin-top: 4rem;
 }
 
 .rerun .highlight {
@@ -15,9 +25,39 @@ h1 {
 blockquote {
 	font-family: serif;
     font-style: italic;
-    font-size: 1.5rem;
-    padding: .1em 0 0 .5em;
-    margin: 0;
+    font-size: 1.25rem;
+    padding: .5em 1em;
+    margin: 1em auto 0;
+    position: relative;
+	border: 1px solid #ddd;
+	box-shadow: 0 5px 13px #eee;
+    background: #fff;
+    display: inline-block;
+
+    &:before {
+    	content: "";
+    	position: absolute;
+    	width: 1rem;
+    	height: 1rem;
+    	border-left: 1px solid #ddd;
+    	border-top: 1px solid #ddd;
+    	background: #fff;
+    	transform: rotate(45deg) translateY(10px);
+    	bottom: 100%;
+    	left: 50%;
+    }
+
+    @media (min-width: 45rem) {
+	    font-size: 1.5rem;
+	    padding: 1em 2em;
+	    margin: 2em auto 1em;
+
+	    &:before {
+	    	width: 2rem;
+	    	height: 2rem;
+	    	transform: rotate(45deg) translateY(22px);
+	    }
+    }
 }
 
 .about {
@@ -36,7 +76,7 @@ blockquote {
 	}
 
 	span {
-		font-size: 10px;
+		font-size: 9px;
 		text-transform: uppercase;
 		color: #aaa;
 		display: block;
@@ -52,10 +92,17 @@ blockquote {
 	}
 }
 
+.activity {
+	margin: 2rem 0 1rem;
+}
+
+.activity-voted {
+	margin-top: 1rem;
+}
+
 .icon {
 	display: inline-block;
-	margin-right: .5em;
-	width: 4rem;
+	margin-right: 1em;
 
 	img {
 		display: block;
@@ -64,5 +111,29 @@ blockquote {
 		border-radius: 50%;
 		overflow: hidden;
 		margin: auto;
+
+	    @media (min-width: 45rem) {
+			width: 5rem;
+			height: 5rem;
+	    }
+
+
 	}
+}
+
+.audio {
+	border: 1px solid #ddd;
+	border-left: 3px solid #d7141a;
+	border-right: 3px solid #11457e;
+	box-shadow: 0 5px 13px #eee;
+	overflow: hidden;
+	margin: 0 -1rem .5em;
+
+	@media (min-width: 40rem) {
+		margin: 0 auto .5em;
+	}
+}
+
+.action-vote + .action-vote {
+	margin-left: 1rem;
 }

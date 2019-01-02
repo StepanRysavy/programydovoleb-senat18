@@ -14,11 +14,36 @@ ul {
 
 li {
 	break-inside: avoid-column;
-	padding-bottom: .5em;
+	padding-bottom: 1rem;
+
+	.all & {
+		padding-bottom: .5rem;
+	}
 }
 
-h3, h4, p {
+.filter {
+	padding: 1rem 0 3rem;
+	columns: 1;
+	li {
+		display: inline-block;
+		word-wrap: nowrap;
+		white-space: nowrap;
+		padding-bottom: .5rem;
+	}
+}
+
+h2, h3, h4, p {
 	margin: 0;
+}
+
+li h5 {
+	margin: 0 0 1rem 0;
+	text-transform: uppercase;
+	font-size: .6rem;
+}
+
+li:not(.party-name) + li h5 {
+	margin-top: 1.75rem;
 }
 
 h1 {
@@ -42,10 +67,68 @@ h4.rerun a {
 	}
 }
 
+small {
+	color: #888;
+	font-size: .84rem;
+	font-weight: normal;
+}
+
 .alphabet h3 {
-	margin: 1rem 0;
+	margin: 3rem 0 1rem 0;
 }
 
 .alphabet li:first-child h3 {
 	margin-top: 0;
+}
+
+.region a {
+	color: #888;
+	border-color: #f4f4f4;
+
+	&:hover {
+		border-color: #aaa;
+		color: #555;
+	}
+}
+
+.desktop-only {
+	display: none;
+
+	@media (min-width: 42rem) {
+		// display: block;
+	}
+
+}
+
+.result:not(.second):not(.win) h4 {
+	font-weight: normal;
+
+	a {
+		color: #ccc;
+		// text-decoration: line-through;
+		border: none;
+	}
+}
+
+.result.win h4 {
+
+	a {
+		&:not(.red) {
+			color: #000;
+		}
+
+		position: relative;
+
+		&:before {
+			content: "";
+			position: absolute;
+			width: .5em;
+			height: .5em;
+			border-radius: 50%;
+			background: #00bf04;
+			top: .4em;
+			right: -1rem;
+		}
+	}
+	
 }

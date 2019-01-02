@@ -5,10 +5,12 @@ ul, li {
 }
 
 ul {
-	padding: 3rem 0;
+
+	padding-top: 3rem;
 
 	@media (min-width: 42rem) {
 		columns: 3;
+		column-gap: 4rem;
 	}
 }
 
@@ -22,19 +24,25 @@ h3, h4, p {
 }
 
 h1 {
-	margin: 0;
+	padding: 0 0 .25em;
+}
 
-	img {
-		width: 100%;
-		max-width: 30rem;
-		height: auto;
-		margin: auto;
-		display: block;
-	}
+h1, h1 + p {
+	text-align: center;
+}
+
+ul + h1 {
+	margin-top: 4rem;
 }
 
 h4 {
 	font-size: 1rem;
+	line-height: 1.5;
+	margin-top: .5em;
+}
+
+h2 {
+	margin: 3rem 0 2rem;
 }
 
 .alphabet h3 {
@@ -52,4 +60,34 @@ strong,
 	&:hover {
 		border-bottom-color: #D7141A;
 	}
+}
+
+.second-round li {
+	padding-bottom: 2rem;
+}
+
+.second-round p {
+	color: #aaa;
+	font-weight: normal;
+}
+
+.win h4 {
+
+	a {
+		color: #000;
+
+		position: relative;
+
+		&:before {
+			content: "";
+			position: absolute;
+			width: .5em;
+			height: .5em;
+			border-radius: 50%;
+			background: #00bf04;
+			top: .4em;
+			right: -1rem;
+		}
+	}
+	
 }

@@ -12,6 +12,10 @@ export default {
       ch: function (result) {
       	return result.charAt(0) === "C" && result.charAt(1) === "h";
       }
-    }
+    },
+    mounted: function () {
+      window.scrollTo(0, 0);
+      this.$store.dispatch("ga", {path: "obvody", title: "Seznam všech obvodů"});
+    },
 };
 

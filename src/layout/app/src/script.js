@@ -1,4 +1,5 @@
 import axios from "axios";
+import VoteModal from "@/components/vote-modal/do";
 
 axios.defaults.baseURL = 'https://senat18.programydovoleb.cz/lib/app/api.php';
 axios.interceptors.request.use(function (config) {
@@ -26,6 +27,9 @@ export default {
         search: ''
       }
     },
+    components: {
+      'vote-modal': VoteModal
+    },
     computed: {
       searched: function () {
         return this.$store.state.search;
@@ -37,7 +41,7 @@ export default {
         return this.sort(this.$store.state.results); // .filter(item => [1,2,3,5,6].indexOf(item.druh) > -1));
       },
       regions: function () {
-        return this.searched.length > 2 ? this.$store.state.enum.filter(item => item.PORADI === this.$store.state.poradi && item.OBVOD_NAZEV.toLowerCase().includes(this.searched.toLowerCase())) : [];
+        return this.searched.length > 1 ? this.$store.state.enum.filter(item => item.PORADI === this.$store.state.poradi && item.OBVOD_NAZEV.toLowerCase().includes(this.searched.toLowerCase())) : [];
       }
     },
     methods: {

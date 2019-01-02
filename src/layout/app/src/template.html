@@ -1,33 +1,35 @@
-<div id="app">
+<div id="app" :class="{page: $route.path != '/'}">
 	<div class="header">
-		<h1>
-			<router-link to="/">
-				<img src="/static/logo.png" alt="Programy kandidátů pro senátní volby 5. a 6. října 2018">
-			</router-link>
-		</h1>
 		<div class="content">
+			<h1>
+				<router-link to="/">
+					<img src="/static/logo.png" alt="Programy kandidátů pro senátní volby 5. a 6. října 2018">
+				</router-link>
+			</h1>
 			<div class="search">
-				<input type="text" v-model="$store.state.search" class="input" placeholder="Jméno kandidáta nebo obvodu">
+				<input type="text" v-model="$store.state.search" class="input" placeholder="Kandidát nebo obvod">
+				<img src="/static/icon/detail.svg" alt="" class="icon-loupe">
 			</div>	
-			<ul v-if="sorted.length > 0">
-				<li v-for="(result, index) in sorted">
-					<div class="result">
-						<h3>
-							<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO"></router-link>
-						</h3>
-						<p v-if="$store.state.enum.length > 0" v-html="$store.state.enum.find(item => item.OBVOD === result.OBVOD).OBVOD_NAZEV"></p>				
-					</div>
-				</li>
-			</ul>
-			<ul v-if="regions.length > 0">
-				<li v-for="(result, index) in regions">
-					<div class="result">
-						<h3>
-							<router-link :to="'/obvod/' + result.HASH" v-html="$store.state.enum.find(item => item.OBVOD === result.OBVOD).OBVOD_NAZEV"></router-link>
-						</h3>
-					</div>
-				</li>
-			</ul>
+			<div class="results-holder" v-if="sorted.length > 0 || regions.length > 0">
+				<ul class="results">
+					<li v-for="(result, index) in sorted">
+						<div class="result">
+							<h3>
+								<router-link :to="'/kandidat/' + result.HASH" v-html="result.CELEJMENO"></router-link>
+							</h3>
+							<p v-if="$store.state.enum.length > 0" v-html="$store.state.enum.find(item => item.OBVOD === result.OBVOD).OBVOD_NAZEV"></p>				
+						</div>
+					</li>
+					<li v-if="sorted.length > 0 && regions.length > 0"><hr></li>
+					<li v-for="(result, index) in regions">
+						<div class="result">
+							<h3>
+								<router-link :to="'/obvod/' + result.HASH" v-html="result.OBVOD_NAZEV"></router-link>
+							</h3>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div class="main">
@@ -37,28 +39,56 @@
 	</div>
 	<div class="footer">
 		<div class="content">
-		    <div class="footer-part">
-		    	<p>Web vytvořil <a href="https://www.twitter.com/stepanrysavy" target="_blank">@stepanrysavy</a></p>
-		    	<p>Číselníky a kandidátky z <a href="https://www.czso.cz/csu/czso/podminky_pro_vyuzivani_a_dalsi_zverejnovani_statistickych_udaju_csu" target="_blank">otevřených dat ČSÚ</a></p>
-		    	<p>Jednotlivé programy vkládají lidé, zaslané odkazy kontrolujeme.</p>
-		    </div>
-			<div class="footer-part">
-				<ul class="footer-menu">
-					<li><router-link to="/kandidati">Všichni kandidáti</router-link></li>
-					<li class="submenu-linear">&middot;</li>
-					<li><router-link to="/infografika">Infografika</router-link></li>
-					<li class="submenu-linear">&middot;</li>
-					<li><router-link to="/impressum">Impressum</router-link></li>
-				</ul>
-			</div>
-			<div class="footer-part">
-		    	<h2>Připojte se:</h2>
-				<ul class="footer-menu">
-					<li><a href="https://www.twitter.com/programydovoleb" target="_blank">Twitter</a></li>
-					<li class="submenu-linear">&middot;</li>
-					<li><a href="https://www.facebook.com/programydovoleb" target="_blank">Facebook</a></li>
-				</ul>
-			</div>
+			<ul class="footer-info">
+				<li v-if="$store.state.votes.hash != ''">
+					<h4>Hlasování</h4>
+					<br>
+		    		<p><router-link :to="'/hlasovani/' + $store.state.votes.view" tag="button" class="button-secondary">Jak jste hlasovali?</router-link></p>
+		    		<h4>Váš hlasovací kód</h4>
+		    		<h1 class="red">{{ $store.state.votes.hash }}</h1>
+		    		<p><small>Zapiště si ho, pokud se budete chtít k hlasování vrátit</small></p>
+				</li>
+				<li>
+					<h4>Senátní volby</h4>
+					<br>
+					<ul class="footer-menu">
+						<li><router-link to="/kandidati">Všichni kandidáti</router-link></li>
+						<li><router-link to="/infografika">Infografika</router-link></li>
+						<li><router-link to="/hlasovani">O hlasování</router-link></li>
+						<li><router-link to="/impressum">Impressum</router-link></li>
+						<li><router-link to="/cookies">Prohlášení o cookies</router-link></li>
+					</ul>
+				</li>
+				<li>
+					<h4>Programy do voleb</h4>
+					<br>
+			    	<p><small>Web vytvořil <a href="https://www.twitter.com/stepanrysavy" target="_blank">@stepanrysavy</a>. Číselníky a kandidátky z <a href="https://www.czso.cz/csu/czso/podminky_pro_vyuzivani_a_dalsi_zverejnovani_statistickych_udaju_csu" target="_blank">otevřených dat ČSÚ</a>. Audio vizitky jsou vložené že stránek <a href="https://www.irozhlas.cz/volby/senatni-volby-2018/kandidati-vizitky/embed-vizitky-senatoru" target="_blank">Českého Rozhlasu</a>. Jednotlivé programy vkládají lidé, zaslané odkazy kontrolujeme.</small></p>
+				</li>
+				<li>
+			    	<h4>Připojte se</h4>
+			    	<br>
+					<div class="social-share">
+						<div class="icon-social">
+							<a href="https://www.facebook.com/programydovoleb" target="_blank" @click="outbound('fb')">
+								<img src="/static/icon/fb.svg" alt="sdílet na Facebooku">
+							</a>
+						</div>
+						<div class="icon-social">
+							<a href="https://www.twitter.com/programydovoleb" target="_blank" @click="outbound('tw')">
+								<img src="/static/icon/tw.svg" alt="účet na Twitteru">
+							</a>
+						</div>
+					</div>
+				</li>
+			</ul>
 		</div>
 	</div>
+	<div class="footer">
+		<div class="content">
+			<a href="https://www.programydovoleb.cz" target="_blank">
+				<img src="/static/logo-global.png" alt="" class="logo-global">
+			</a>
+		</div>
+	</div>
+	<vote-modal v-if="$store.state.votes.modal.show === true"></vote-modal>
 </div>

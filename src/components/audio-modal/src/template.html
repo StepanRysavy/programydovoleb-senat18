@@ -1,0 +1,12 @@
+<div class="modal">
+	<div class="modal-audio">
+		<div class="audio">
+			<iframe :src="link" width="100%" height="290" noresize="resize" scrolling="no" frameborder="no"></iframe>
+		</div> 
+		<p><small>Audio vizitka je vložena ze stránek <a href="https://www.irozhlas.cz/volby/senatni-volby-2018/kandidati-vizitky/embed-vizitky-senatoru" target="_blank">Českého rozhlasu</a></small>. Načtení může pár vteřin trvat.</p>
+		<div class="actions">
+			<button @click="changeTo(null)" class="button-secondary">Zavřít</button>
+			<button @click="next()">Další vizitka</button>
+		</div>
+	</div>
+</div>

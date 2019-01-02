@@ -1,4 +1,62 @@
 <div class="layout-detail" v-if="$store.state.enum.length > 0">
+	<h1>Seznam zvolených senátorů</h1>
+	<ul class="second-round">
+		<li v-for="(candidate, index) in $store.state.listOfCandidates.filter(item => item.WIN === 1)">
+			<div class="result">
+				<h3>
+					<router-link :to="'/kandidat/' + candidate.HASH">
+						{{ candidate.CELEJMENO }}
+					</router-link>
+				</h3>
+				<p><small>
+					<router-link :to="'/obvod/' + region(candidate.OBVOD).HASH" class="red">
+						{{ region(candidate.OBVOD).OBVOD_NAZEV }}
+					</router-link>
+					&middot;
+					{{ shorten(candidate.STRANAJMENO) }}
+				</small></p>
+			</div>
+		</li>
+	</ul>
+	<h1>Druhé kolo senátních voleb</h1>
+	<ul class="second-round">
+		<li v-for="(result, index) in list" v-if="$store.state.listOfCandidates.filter(item => item.SECOND === 1 && item.OBVOD === result.OBVOD).length === 2">
+			<div class="result">
+				<h3>
+					<router-link :to="'/obvod/' + result.HASH" v-html="result.OBVOD_NAZEV" class="red"></router-link> 
+					<span class="dimm">
+						&middot;
+						{{ result.OBVOD }}
+					</span>
+				</h3>
+				<h4 v-for="(candidate, index2) in $store.state.listOfCandidates.filter(item => item.SECOND === 1 && item.OBVOD === result.OBVOD)">
+					<router-link :to="'/kandidat/' + candidate.HASH">
+						{{ candidate.CELEJMENO }}
+					</router-link>
+					<p><small>{{ shorten(candidate.STRANAJMENO) }}</small></p>
+				</h4>
+
+			</div>
+		</li><!--
+		<li>
+			<div class="result win" style="padding-top: 2rem">
+				<h3 class="red">Již zvolení senátoři:</h3>
+				<h4>
+					<router-link to="/kandidat/drahos">prof. Ing. Jiří Drahoš, DrSc.</router-link>
+				</h4>
+				<h4>
+					<router-link to="/kandidat/cunek">Jiří Čunek</router-link>
+				</h4>
+			</div>
+		</li>-->
+		<li>
+			<div class="result" style="padding-top: 2rem">
+				<h3>
+					<router-link to="/kandidati" class="red">Kompletní přehled</router-link>
+				</h3>
+			</div>
+		</li>
+	</ul><!--
 	<h1>V kterých obvodech se letos volí?</h1>
 	<ul>
 		<li v-for="(result, index) in list">
@@ -29,7 +87,7 @@
 				</h4>
 			</div>
 		</li>
-	</ul>
+	</ul>-->
 	<template v-if="$store.state.images.loaded === true">
 		<h1>Poslední grafy a visuály</h1>
 		<list-of-images :list="latestImages" :columns="3"></list-of-images>
